@@ -37,11 +37,11 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_OFFLOADING
 config PACKAGE_$(PKG_NAME)_INCLUDE_SHORTCUT_FE_DRV
 	bool "Include Shortcut-FE for ECM"
 	depends on PACKAGE_$(PKG_NAME)_INCLUDE_SHORTCUT_FE=n
-	default y if (TARGET_ipq806x||TARGET_ipq807x)
+	default n
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_SHORTCUT_FE
 	bool "Include Shortcut-FE"
-	default y if !(TARGET_ipq806x||TARGET_ipq807x||TARGET_ramips||i386||x86_64)
+	default y if !(TARGET_ramips||i386||x86_64)
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_BBR_CCA
 	bool "Include BBR CCA"
@@ -54,6 +54,16 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_DNSFORWARDER
 config PACKAGE_$(PKG_NAME)_INCLUDE_DNSPROXY
 	bool "Include DNSProxy"
 	default n
+endef
+
+define Package/$(PKG_NAME)/preinst
+#!/bin/sh
+sed -i 's/s:option(Flag, "fullcone", translate("Enable FullCone NAT"))/-- e:option(Flag,"fullcone",translate("Enable FullCone NAT"))/g' $${IPKG_INSTROOT}/usr/lib/lua/luci/model/cbi/firewall/zones.lua
+endef
+
+define Package/$(PKG_NAME)/postrm
+#!/bin/sh
+sed -i 's/-- s:option(Flag, "fullcone", translate("Enable FullCone NAT"))/s:option(Flag, "fullcone", translate("Enable FullCone NAT"))/g' $${IPKG_INSTROOT}/usr/lib/lua/luci/model/cbi/firewall/zones.lua
 endef
 
 include $(TOPDIR)/feeds/luci/luci.mk
