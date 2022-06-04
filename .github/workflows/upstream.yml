@@ -163,7 +163,8 @@ jobs:
         net/openvpn utils/cgroupfs-mount utils/coremark net/xray-core net/nginx net/uwsgi net/ddns-scripts
         git_sparse_clone master "https://github.com/openwrt/packages" "oppackages" admin/netdata net/smartdns net/ariang
         git_sparse_clone openwrt-21.02 "https://github.com/openwrt/openwrt" "openwrt" \
-        package/base-files package/network/config/firewall package/system/opkg package/libs/mbedtls package/network/services/ppp package/network/services/dnsmasq
+        package/base-files package/network/config/firewall package/system/opkg package/libs/mbedtls package/network/services/ppp package/network/services/dnsmasq \
+        package/libs/openssl
         git_sparse_clone openwrt-21.02 "https://github.com/openwrt/luci" "opluci" applications/luci-app-attendedsysupgrade applications/luci-app-aria2 \
         applications/luci-app-ddns applications/luci-app-acme applications/luci-app-transmission applications/luci-app-opkg applications/luci-app-firewall \
         applications/luci-app-ksmbd applications/luci-app-samba4 modules/luci-base modules/luci-mod-network \
@@ -257,6 +258,7 @@ jobs:
         touch /tmp/ok
         ) &
         
+        (
         for pkg in $(find -maxdepth 1 -type d -name "luci-*" ! -name "luci-app-dockerman"); do
           if [ "$(grep "luci.mk" $pkg/Makefile)" ]; then
             sed -i '/\(PKG_VERSION\|PKG_RELEASE\):=/d' $pkg/Makefile
@@ -264,6 +266,8 @@ jobs:
           grep -q '"nas",' $pkg/luasrc/controller/*.lua && ! grep -q '_("NAS")' $pkg/luasrc/controller/*.lua &&
             sed -i 's/index()/index()\n\tentry({"admin", "nas"}, firstchild(), _("NAS") , 45).dependent = false/' $pkg/luasrc/controller/*.lua
         done
+        ) &
+
         (
         for pkg in $(ls -d */); do
           if [[ "$(grep "PKG_VERSION" $pkg/Makefile)" && ! "$(grep "PKG_RELEASE" $pkg/Makefile)" ]]; then
@@ -276,6 +280,7 @@ jobs:
         touch /tmp/ok2
         ) &
 
+        (
         bash diy/create_acl_for_luci.sh -a >/dev/null 2>&1 || true
         bash diy/convert_translation.sh -a >/dev/null 2>&1 || true
         
@@ -316,6 +321,7 @@ jobs:
           -e 's?\.\./\.\./luci.mk?$(TOPDIR)/feeds/luci/luci.mk?' \
           -e 's/ca-certificates/ca-bundle/' \
           */Makefile
+        ) &
         
         while [[ ! -f /tmp/ok ||  ! -f /tmp/ok2 ]]; do
             echo "wait"
