@@ -1,7 +1,9 @@
 --- a/luci-base/root/usr/libexec/rpcd/luci
 +++ b/luci-base/root/usr/libexec/rpcd/luci
-@@ -45,2 +45,29 @@
- 
+@@ -43,6 +43,33 @@ local methods = {
+ 		end
+ 	},
+
 +    getCPUInfo = {
 +        call = function()
 +            local sys = require "luci.sys"
@@ -30,6 +32,15 @@
 +	},
 +
  	setLocaltime = {
+ 		args = { localtime = 0 },
+ 		call = function(args)
+@@ -206,6 +233,7 @@ local methods = {
+ 			local rv = {}
+ 			local ok, fd
+
++			rv.fullconenat   = fs.access("/sys/module/xt_FULLCONENAT/refcnt")
+ 			rv.firewall      = fs.access("/sbin/fw3")
+ 			rv.opkg          = fs.access("/bin/opkg")
 
 --- a/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json
 +++ b/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json
