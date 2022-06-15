@@ -10,8 +10,8 @@ include $(TOPDIR)/rules.mk
 PKG_ARCH_quickstart:=$(ARCH)
 
 PKG_NAME:=quickstart
-PKG_VERSION:=0.4.7
-PKG_RELEASE:=15
+PKG_VERSION:=0.4.8
+PKG_RELEASE:=16
 PKG_SOURCE:=$(PKG_NAME)-binary-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://fw.koolcenter.com/binary/quickstart/
 PKG_HASH:=skip
@@ -28,7 +28,7 @@ define Package/$(PKG_NAME)
 	CATEGORY:=Network
 	SUBMENU:=Web Servers/Proxies
 	TITLE:=Quickstart, the quick start.
-	DEPENDS:=@(x86_64||aarch64)
+	DEPENDS:=@(x86_64||aarch64) +shadow-utils +shadow-useradd +mount-utils +lsblk +e2fsprogs +parted
 	URL:=https://easepi.linkease.com/
 endef
 
