@@ -43,33 +43,6 @@ local methods = {
 		end
 	},
 
-    getCPUInfo = {
-        call = function()
-            local sys = require "luci.sys"
-            local rv = {}
-            rv.cpufreq      = sys.exec("/sbin/cpuinfo")
-            rv.cpufree      = (sys.exec("expr 100 - $(top -n 1 | grep 'CPU:' | awk -F '%' '{print$4}' | awk -F ' ' '{print$2}')") or "2.33") .. "%"
-            rv.cpumark      = sys.exec("cat /etc/bench.log")
-            return rv
-        end
-    },
-
-	getEthInfo = {
-		call = function()
-			local sys = require "luci.sys"
-			local result = sys.exec("ethinfo 2>/dev/null")
-			return { result = result }
-		end
-	},
-
-	getUserInfo = {
-		call = function()
-			local sys = require "luci.sys"
-			local result = sys.exec("cat /proc/net/arp | grep 'br-lan' | grep '0x2' | wc -l")
-			return { result = result }
-		end
-	},
-
 	setLocaltime = {
 		args = { localtime = 0 },
 		call = function(args)
@@ -192,7 +165,11 @@ local methods = {
 			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")
 			local rv = {}
 
-			if ok then
+			if not (ok and fd) then
+				ok, fd = pcall(io.open, "/usr/share/firewall4/helpers", "r")
+			end
+
+			if ok and fd then
 				local entry
 
 				while true do
@@ -233,10 +210,11 @@ local methods = {
 			local rv = {}
 			local ok, fd
 
-			rv.fullconenat   = fs.access("/sys/module/xt_FULLCONENAT/refcnt")
 			rv.firewall      = fs.access("/sbin/fw3")
+			rv.firewall4     = fs.access("/sbin/fw4")
 			rv.opkg          = fs.access("/bin/opkg")
-			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt")
+			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt") or fs.access("/sys/module/nft_flow_offload/refcnt")
+			rv.fullconenat   = fs.access("/sys/module/xt_FULLCONENAT/refcnt")
 			rv.br2684ctl     = fs.access("/usr/sbin/br2684ctl")
 			rv.swconfig      = fs.access("/sbin/swconfig")
 			rv.odhcpd        = fs.access("/usr/sbin/odhcpd")
@@ -246,7 +224,7 @@ local methods = {
 			rv.dropbear      = fs.access("/usr/sbin/dropbear")
 			rv.cabundle      = fs.access("/etc/ssl/certs/ca-certificates.crt")
 			rv.relayd        = fs.access("/usr/sbin/relayd")
-			rv.dsl           = fs.access("/sbin/vdsl_cpe_control")
+			rv.dsl           = fs.access("/sbin/dsl_cpe_control") or fs.access("/sbin/vdsl_cpe_control")
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "acs", "sae", "owe", "suiteb192", "wep", "wps" }
 
@@ -640,6 +618,66 @@ local methods = {
 				res[#res + 1] = v
 			end
 			return { result = res }
+		end
+	},
+
+	getCPUBench = {
+		call = function()
+			local sys = require "luci.sys"
+			local cpubench = {}
+
+			cpubench.cpubench = sys.exec("cat /etc/bench.log 2>/dev/null")
+			return cpubench
+		end
+	},
+
+	getCPUInfo = {
+		call = function()
+			local sys = require "luci.sys"
+			local cpuinfo = {}
+
+			cpuinfo.cpuinfo = sys.exec("/sbin/cpuinfo")
+
+			return cpuinfo
+		end
+	},
+
+	getCPUUsage = {
+		call = function()
+			local sys = require "luci.sys"
+			local cpuusage = {}
+
+			cpuusage.cpuusage = sys.exec("top -n1 | awk '/^CPU/ {printf(\"%d%\", 100 - $8)}'") or "6%"
+			return cpuusage
+		end
+	},
+
+	getETHInfo = {
+		call = function()
+			local sys = require "luci.sys"
+			local result = sys.exec("ethinfo 2>/dev/null")
+			return { result = result }
+		end
+	},
+
+	getOnlineUsers = {
+		call = function()
+			local sys = require "luci.sys"
+			local onlineusers = {}
+
+			onlineusers.onlineusers = sys.exec("cat /proc/net/arp | grep 'br-lan' | grep '0x2' | wc -l")
+			return onlineusers
+
+		end
+	},
+
+	getTempInfo = {
+		call = function()
+			local sys = require "luci.sys"
+			local tempinfo = {}
+
+			tempinfo.tempinfo = sys.exec("/sbin/tempinfo 2>/dev/null")
+			return tempinfo
 		end
 	}
 }

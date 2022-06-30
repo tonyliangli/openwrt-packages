@@ -62,7 +62,7 @@ function renderbox(ifc, ipv6) {
 
 var callUserInfo = rpc.declare({
     object: 'luci',
-    method: 'getUserInfo'
+    method: 'getOnlineUsers'
 });
 
 return baseclass.extend({
@@ -100,7 +100,7 @@ return baseclass.extend({
 			]));
 			ctstatus.appendChild(E('div', { 'class': 'tr' }, [
 				E('div', { 'class': 'td left' }, _('Online Users')),
-				E('div', { 'class': 'td left' },  userinfo.result)
+				E('div', { 'class': 'td left' },  userinfo.onlineusers)
 			]));
 		}
 

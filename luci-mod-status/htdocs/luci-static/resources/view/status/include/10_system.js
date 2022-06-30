@@ -13,9 +13,24 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
+var callCPUBench = rpc.declare({
+	object: 'luci',
+	method: 'getCPUBench'
+});
+
 var callCPUInfo = rpc.declare({
-    object: 'luci',
-    method: 'getCPUInfo'
+	object: 'luci',
+	method: 'getCPUInfo'
+});
+
+var callCPUUsage = rpc.declare({
+	object: 'luci',
+	method: 'getCPUUsage'
+});
+
+var callTempInfo = rpc.declare({
+	object: 'luci',
+	method: 'getTempInfo'
 });
 
 return baseclass.extend({
@@ -25,7 +40,10 @@ return baseclass.extend({
 		return Promise.all([
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(callSystemInfo(), {}),
+			L.resolveDefault(callCPUBench(), {}),
 			L.resolveDefault(callCPUInfo(), {}),
+			L.resolveDefault(callCPUUsage(), {}),
+			L.resolveDefault(callTempInfo(), {}),
 			fs.lines('/usr/lib/lua/luci/version.lua')
 		]);
 	},
@@ -33,8 +51,11 @@ return baseclass.extend({
 	render: function(data) {
 		var boardinfo   = data[0],
 		    systeminfo  = data[1],
-		    cpuinfo     = data[2],
-		    luciversion = data[3];
+		    cpubench    = data[2],
+		    cpuinfo     = data[3],
+		    cpuusage    = data[4],
+		    tempinfo    = data[5],
+		    luciversion = data[6];
 
 		luciversion = luciversion.filter(function(l) {
 			return l.match(/^\s*(luciname|luciversion)\s*=/);
@@ -59,20 +80,27 @@ return baseclass.extend({
 
 		var fields = [
 			_('Hostname'),         boardinfo.hostname,
-			_('Model'),            boardinfo.model + ' ' + cpuinfo.cpumark,
-			_('Architecture'),     boardinfo.system,
+			_('Model'),            boardinfo.model + cpubench.cpubench,
 			_('Target Platform'),  (L.isObject(boardinfo.release) ? boardinfo.release.target : ''),
 			_('Firmware Version'), (L.isObject(boardinfo.release) ? boardinfo.release.description + ' / ' : '') + (luciversion || ''),
 			_('Kernel Version'),   boardinfo.kernel,
 			_('Local Time'),       datestr,
 			_('Uptime'),           systeminfo.uptime ? '%t'.format(systeminfo.uptime) : null,
-			_('CPU Info'),         cpuinfo.cpufreq,
 			_('Load Average'),     Array.isArray(systeminfo.load) ? '%.2f, %.2f, %.2f'.format(
 				systeminfo.load[0] / 65535.0,
 				systeminfo.load[1] / 65535.0,
 				systeminfo.load[2] / 65535.0
 			) : null
 		];
+
+		if (tempinfo.tempinfo) {
+			fields.splice(6, 0, _('Temperature'));
+			fields.splice(7, 0, tempinfo.tempinfo);
+		}
+		if (cpuinfo.cpuinfo) {
+			fields.splice(4, 0, _('Architecture'));
+			fields.splice(5, 0, cpuinfo.cpuinfo);
+		}
 
 		var table = E('table', { 'class': 'table' });
 
