@@ -905,7 +905,7 @@ function dispatch(request)
 				sid, timeout, build_url(), http.getenv("HTTPS") == "on" and "; secure" or ""
 			})
 			
-			sys.exec("opkg update >/dev/null &")
+			sys.exec("/usr/libexec/opkg-call update >/dev/null &")
 
 			http.redirect(build_url(unpack(ctx.requestpath)))
 			return
