@@ -18,8 +18,8 @@
 /mentohust
 /subweb
 /wget
+/mt
 /autosamba
-/frp
 /amule
 /npc
 /fcgiwrap
@@ -33,6 +33,5 @@
 /rclone
 /luci-lib-docker
 /rclone-*
-/mt
 /mtk-eip93
 /r8152
