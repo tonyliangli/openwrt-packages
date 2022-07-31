@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mosdns
-PKG_VERSION:=abcb222
-PKG_RELEASE:=62
+PKG_VERSION:=0a421e5
+PKG_RELEASE:=63
 
 PKG_SOURCE:=mosdns-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/IrineSistiana/mosdns/tar.gz/$(PKG_VERSION)?
@@ -44,11 +44,6 @@ define Package/mosdns
   DEPENDS:=$(GO_ARCH_DEPENDS)
 endef
 
-define Package/mosdns-neo
-  $(call Package/mosdns/Default)
-  DEPENDS:=$(GO_ARCH_DEPENDS)
-endef
-
 define Package/mosdns/config
 config MOSDNS_COMPRESS_GOPROXY
 	bool "Compiling with GOPROXY proxy"
@@ -81,10 +76,5 @@ define Package/mosdns/install
 	$(call GoPackage/Package/Install/Bin,$(1))
 endef
 
-define Package/mosdns-neo/install
-	$(call GoPackage/Package/Install/Bin,$(1))
-endef
-
 $(eval $(call GoBinPackage,mosdns))
 $(eval $(call BuildPackage,mosdns))
-$(eval $(call BuildPackage,mosdns-neo))
