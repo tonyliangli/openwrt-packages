@@ -2,69 +2,32 @@
 # Author Xiaobao(xiaobao@linkease.com)
 
 ACTION=${1}
-WRLOCK=/var/lock/jellyfin.lock
-LOGFILE=/var/log/jellyfin.log
-LOGEND="XU6J03M6"
 shift 1
 
-ARCH=''
+ARCH="default"
 IMAGE_NAME='default'
 
-check_params() {
-
-  if [ -z "${WRLOCK}" ]; then
-    echo "lock file not found"
-    exit 1
-  fi
-
-  if [ -z "${LOGFILE}" ]; then
-    echo "logger file not found"
-    exit 1
-  fi
-
-}
-
-lock_run() {
-  local lock="$WRLOCK"
-  exec 300>$lock
-  flock -n 300 || return
-  do_run
-  flock -u 300
-  return
-}
-
-run_action() {
-  if check_params; then
-    lock_run
-  fi
-}
-
 get_image() {
-  ARCH="arm64"
-  if echo `uname -m` | grep -Eqi 'x86_64'; then
-    ARCH="amd64"
-  elif  echo `uname -m` | grep -Eqi 'aarch64'; then
-    ARCH="arm64"
-  else
-    ARCH="arm64"
+  if grep -Eq ',rtd-?129.$' /proc/device-tree/compatible 2>/dev/null; then
+    ARCH="rtd129x"
   fi
-
-  if [ "${ARCH}" = "amd64" ]; then
-    IMAGE_NAME="jellyfin/jellyfin"
-  else
-    if [ "$IMAGE_NAME" == "default" ]; then
-        IMAGE_NAME="jjm2473/jellyfin-rtk:latest"
-        if uname -r | grep -q '^4\.9\.'; then
-          IMAGE_NAME="jjm2473/jellyfin-rtk:4.9-latest"
-        fi
+  IMAGE_NAME=`uci get jellyfin.@jellyfin[0].image 2>/dev/null`
+  if [ -z "$IMAGE_NAME" -o "$IMAGE_NAME" == "default" ]; then
+    if [ "${ARCH}" = "rtd129x" ]; then
+      IMAGE_NAME="jjm2473/jellyfin-rtk:latest"
+      if uname -r | grep -q '^4\.9\.'; then
+        IMAGE_NAME="jjm2473/jellyfin-rtk:4.9-latest"
+      fi
+    else
+      IMAGE_NAME="jellyfin/jellyfin"
     fi
   fi
 }
 
 do_install() {
   get_image
-  echo "docker pull ${IMAGE_NAME}" >${LOGFILE}
-  docker pull ${IMAGE_NAME} >>${LOGFILE} 2>&1
+  echo "docker pull ${IMAGE_NAME}"
+  docker pull ${IMAGE_NAME}
   docker rm -f jellyfin
 
   do_install_detail
@@ -78,14 +41,14 @@ do_install_detail() {
   local port=`uci get jellyfin.@jellyfin[0].port 2>/dev/null`
 
   if [ -z "$config" ]; then
-      echo "config path is empty!" >>${LOGFILE}
+      echo "config path is empty!"
       exit 1
   fi
 
   [ -z "$port" ] && port=8096
 
   local cmd="docker run --restart=unless-stopped -d -v \"$config:/config\" "
-  if [ "${ARCH}" = "arm64" ]; then
+  if [ "${ARCH}" = "rtd129x" ]; then
     cmd="$cmd\
     --device /dev/rpc0:/dev/rpc0 \
     --device /dev/rpc1:/dev/rpc1 \
@@ -108,6 +71,10 @@ do_install_detail() {
     -v /sys/class/uio:/sys/class/uio \
     -v /var/tmp/vowb:/var/tmp/vowb \
     --pid=host "
+  elif [ -d /dev/dri ]; then
+    cmd="$cmd\
+    --device /dev/dri:/dev/dri \
+    --privileged "
   fi
   if [ "$hostnet" = 1 ]; then
     cmd="$cmd\
@@ -119,31 +86,19 @@ do_install_detail() {
     -p $port:8096 "
   fi
 
+  local tz="`cat /tmp/TZ`"
+  [ -z "$tz" ] || cmd="$cmd -e TZ=$tz"
+
   [ -z "$cache" ] || cmd="$cmd -v \"$cache:/config/transcodes\""
   [ -z "$media" ] || cmd="$cmd -v \"$media:/media\""
 
   cmd="$cmd -v /mnt:/mnt"
   mountpoint -q /mnt && cmd="$cmd:rslave"
-  cmd="$cmd --name jellyfin \"$IMAGE_NAME\" >>\"${LOGFILE}\" 2>&1"
+  cmd="$cmd --name jellyfin \"$IMAGE_NAME\""
 
-  echo "$cmd" >>${LOGFILE}
+  echo "$cmd"
   eval "$cmd"
 
-  echo ${LOGEND} >> ${LOGFILE}
-  sleep 5
-  rm -f ${LOGFILE}
-}
-
-# run in lock
-do_run() {
-  case ${ACTION} in
-    "install")
-      do_install
-    ;;
-    "upgrade")
-      do_install
-    ;;
-  esac
 }
 
 usage() {
@@ -151,20 +106,32 @@ usage() {
   echo "where sub-command is one of:"
   echo "      install                Install the jellyfin"
   echo "      upgrade                Upgrade the jellyfin"
-  echo "      remove                 Remove the jellyfin"
+  echo "      rm/start/stop/restart  Remove/Start/Stop/Restart the jellyfin"
+  echo "      status                 Jellyfin status"
+  echo "      port                   Jellyfin port"
 }
 
 case ${ACTION} in
   "install")
-    run_action
+    do_install
   ;;
   "upgrade")
-    run_action
+    do_install
   ;;
-  "remove")
+  "rm")
     docker rm -f jellyfin
+  ;;
+  "start" | "stop" | "restart")
+    docker ${ACTION} jellyfin
+  ;;
+  "status")
+    docker ps --all -f 'name=jellyfin' --format '{{.State}}'
+  ;;
+  "port")
+    docker ps --all -f 'name=jellyfin' --format '{{.Ports}}' | grep -om1 '0.0.0.0:[0-9]*' | sed 's/0.0.0.0://'
   ;;
   *)
     usage
+    exit 1
   ;;
 esac
