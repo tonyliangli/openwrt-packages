@@ -149,6 +149,7 @@ jobs:
         git_clone https://github.com/linkease/istore && mv -n istore/luci/* ./; rm -rf istore
         git_clone https://github.com/linkease/luci-app-linkease
         git_clone https://github.com/linkease/openwrt-app-actions && mv -n openwrt-app-actions/applications/* ./;rm -rf openwrt-app-actions luci-app-kodexplorer luci-app-netdata
+        git_clone https://github.com/AlexZhuo/luci-app-bandwidthd
         ) &
         (
         git_clone https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
@@ -159,8 +160,9 @@ jobs:
         git_clone https://github.com/gSpotx2f/luci-app-log
         git_clone https://github.com/KFERMercer/luci-app-tcpdump
         git_clone https://github.com/koshev-msk/luci-app-modeminfo opmodeminfo && mvdir opmodeminfo
-        git_clone https://github.com/ykxVK8yL5L/pikpak-webdav && mv -n pikpak-webdav/openwrt/* ./;rm -rf pikpak-webdav
+        git_clone https://github.com/ykxVK8yL5L/pikpak-webdav pikpak && mv -n pikpak/openwrt/* ./;rm -rf pikpak
         git_clone https://github.com/jjm2473/openwrt-apps && rm -rf openwrt-apps/{luci-app-cpufreq,luci-app-ota,luci-alias.mk} && sed -i "s/luci-alias.mk/..\/luci.mk/" openwrt-apps/*/Makefile && mvdir openwrt-apps
+        git_clone https://github.com/4IceG/luci-app-3ginfo op3ginfo  && mv -n op3ginfo/{3ginfo,luci-app-3ginfo} ./;rm -rf op3ginfo
         ) &
         (
         svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
@@ -199,11 +201,11 @@ jobs:
         git_sparse_clone develop "https://github.com/Ysurac/openmptcprouter-feeds" "openmptcp" luci-app-snmpd \
         luci-app-packet-capture luci-app-mail msmtp
         git_sparse_clone master "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
-        package/kernel/r8125 package/kernel/r8168 package/emortal/autocore package/network/utils/fullconenat
+        package/kernel/r8125 package/kernel/r8168 package/kernel/rtl8189es package/emortal/autocore package/network/utils/fullconenat
         ) &
 
         svn export --force https://github.com/coolsnowwolf/luci/trunk/applications
-        rm -rf applications/luci-app-qbittorrent applications/luci-app-cpufreq
+        rm -rf applications/{luci-app-qbittorrent,luci-app-cpufreq,luci-app-zerotier}
         svn co https://github.com/immortalwrt/luci/trunk/applications
 
         for ipk in $(ls -d applications/!(luci-app-rclone|luci-app-mwan3|luci-app-transmission)/); do
@@ -231,7 +233,7 @@ jobs:
 
     - name: Apply patches
       run: |
-        find "diy/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 -E --forward --no-backup-if-mismatch"
+        find "diy/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 -E --forward --no-backup-if-mismatch" || (curl -k --data chat_id="${{ env.TELEGRAM_CHAT_ID }}" --data "text=❌ 软件包更新失败 😂 https://github.com/kiddin9/openwrt-packages/actions" "https://api.telegram.org/bot${{ env.TELEGRAM_TOKEN }}/sendMessage";exit 1)
 
     - name: Modify
       run: |
