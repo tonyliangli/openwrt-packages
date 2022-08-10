@@ -126,17 +126,6 @@
    VARIANT:=ssl
    DEFAULT_VARIANT:=1
 
---- a/ntfs3-mount/Makefile
-+++ b/ntfs3-mount/Makefile
-@@ -10,7 +10,7 @@ define Package/ntfs3-mount
-   CATEGORY:=Utilities
-   SUBMENU:=Filesystem
-   TITLE:=NTFS mount script for Paragon NTFS3 driver
--  DEPENDS:=+LINUX_5_4:kmod-fs-ntfs3-oot +(LINUX_5_15||LINUX_5_18):kmod-fs-ntfs3
-+  DEPENDS:=+(LINUX_5_4||LINUX_5_10||LINUX_4_4):kmod-fs-ntfs +(LINUX_5_15||LINUX_5_18):kmod-fs-ntfs3
-   PKGARCH:=all
- endef
-
 --- a/luci-app-homeassistant/Makefile
 +++ b/luci-app-homeassistant/Makefile
 @@ -6,7 +6,7 @@ PKG_NAME:=luci-app-homeassistant
@@ -171,3 +160,15 @@
  endef
 
  define KernelPackage/ipt-fullconenat
+
+--- a/k3screenctrl/Makefile
++++ b/k3screenctrl/Makefile
+@@ -19,7 +19,7 @@ TARGET_CFLAGS+= -D_GNU_SOURCE
+ define Package/k3screenctrl
+   SECTION:=utils
+   CATEGORY:=Utilities
+-  DEPENDS:=@TARGET_bcm53xx_generic_DEVICE_phicomm_k3 +@KERNEL_DEVMEM
++  DEPENDS:=@(TARGET_bcm53xx_generic_DEVICE_phicomm_k3||TARGET_DEVICE_bcm53xx_generic_DEVICE_phicomm_k3) +@KERNEL_DEVMEM
+   TITLE:=LCD screen controller on PHICOMM K3
+   URL:=https://github.com/updateing/k3-screen-ctrl
+ endef
