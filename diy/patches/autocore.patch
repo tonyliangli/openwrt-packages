@@ -78,7 +78,7 @@
 +			local kernel_version = sys.exec("echo -n $(uname -r)")
  			local rv = {}
  			local ok, fd
- 
+
 @@ -210,5 +212,6 @@ local methods = {
  			rv.opkg          = fs.access("/bin/opkg")
  			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt") or fs.access("/sys/module/nft_flow_offload/refcnt")
