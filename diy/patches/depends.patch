@@ -65,7 +65,7 @@
    CATEGORY:=Base system
    TITLE:=OpenWrt C Firewall
 -  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +kmod-ipt-nat
-+  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libiptext +IPV6:libiptext6 +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +iptables-mod-fullconenat +ip6tables-mod-fullconenat +iptables +ip6tables +kmod-ipt-offload
++  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libiptext +IPV6:libiptext6 +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +kmod-ipt-nat +kmod-ipt-nat6 +iptables-mod-fullconenat +ip6tables-mod-fullconenat +iptables +ip6tables +kmod-ipt-offload
  endef
  
  define Package/firewall/description
@@ -128,38 +128,27 @@
 
 --- a/luci-app-homeassistant/Makefile
 +++ b/luci-app-homeassistant/Makefile
-@@ -6,7 +6,7 @@ PKG_NAME:=luci-app-homeassistant
+@@ -7,7 +7,7 @@ PKG_RELEASE:=
 
  LUCI_TITLE:=LuCI support for homeassistant
  LUCI_PKGARCH:=all
--LUCI_DEPENDS:=+docker +luci-lib-iform
-+LUCI_DEPENDS:=+luci-app-dockerman +luci-lib-iform
+-LUCI_DEPENDS:=+docker +luci-lib-taskd
++LUCI_DEPENDS:=@(aarch64||arm||x86_64) +luci-app-dockerman +luci-lib-taskd
 
- include $(TOPDIR)/feeds/luci/luci.mk
+ define Package/luci-app-homeassistant/conffiles
+ /etc/config/homeassistant
 
 --- a/luci-app-unblockneteasemusic/Makefile
 +++ b/luci-app-unblockneteasemusic/Makefile
 @@ -5,7 +5,7 @@
  include $(TOPDIR)/rules.mk
 
- LUCI_TITLE:=LuCI support for UnblockNeteaseMusic
+ LUCI_TITLE:=LuCI support for UnblockNeteaseMusic (JavaScript)
 -LUCI_DEPENDS:=+busybox +dnsmasq-full +ipset +jsonfilter +node +uclient-fetch +ucode \
-+LUCI_DEPENDS:=+busybox +dnsmasq-full +ipset +jsonfilter +node +UnblockNeteaseMusic +uclient-fetch +ucode \
++LUCI_DEPENDS:=+busybox +dnsmasq-full +ipset +jsonfilter +node +uclient-fetch +ucode +UnblockNeteaseMusic \
  	@(PACKAGE_libustream-mbedtls||PACKAGE_libustream-openssl||PACKAGE_libustream-wolfssl)
  LUCI_PKGARCH:=all
 
-
---- a/fullconenat/Makefile
-+++ b/fullconenat/Makefile
-@@ -36,7 +36,7 @@ define Package/ip6tables-mod-fullconenat
-   SECTION:=net
-   CATEGORY:=Network
-   TITLE:=FULLCONENAT ip6tables extension
--  DEPENDS:=ip6tables +kmod-nf-nat6 +kmod-ipt-fullconenat +ip6tables-mod-nat
-+  DEPENDS:=+ip6tables +kmod-nf-nat6 +kmod-ipt-fullconenat +ip6tables-mod-nat
- endef
-
- define KernelPackage/ipt-fullconenat
 
 --- a/k3screenctrl/Makefile
 +++ b/k3screenctrl/Makefile
@@ -172,3 +161,49 @@
    TITLE:=LCD screen controller on PHICOMM K3
    URL:=https://github.com/updateing/k3-screen-ctrl
  endef
+
+--- a/ntfs3-mount/Makefile
++++ b/ntfs3-mount/Makefile
+@@ -10,7 +10,7 @@ define Package/ntfs3-mount
+   CATEGORY:=Utilities
+   SUBMENU:=Filesystem
+   TITLE:=NTFS mount script for Paragon NTFS3 driver
+-  DEPENDS:=+LINUX_5_4:kmod-fs-ntfs3-oot +(LINUX_5_15||LINUX_5_19):kmod-fs-ntfs3
++  DEPENDS:=+kmod-fs-ntfs3
+   PKGARCH:=all
+ endef
+
+
+--- a/dockerd/Makefile
++++ b/dockerd/Makefile
+@@ -83,14 +83,14 @@ define Build/Prepare
+ 	$(Build/Prepare/Default)
+
+ 	# Verify dependencies are the vendored version
+-	$(call EnsureVendoredVersion,../containerd/Makefile,containerd.installer)
+-	$(call EnsureVendoredCommit,../libnetwork/Makefile,proxy.installer)
+-	$(call EnsureVendoredVersion,../runc/Makefile,runc.installer)
+-	$(call EnsureVendoredVersion,../tini/Makefile,tini.installer)
++	$(call EnsureVendoredVersion,../../packages/utils/containerd/Makefile,containerd.installer)
++	$(call EnsureVendoredCommit,../../packages/utils/libnetwork/Makefile,proxy.installer)
++	$(call EnsureVendoredVersion,../../packages/utils/runc/Makefile,runc.installer)
++	$(call EnsureVendoredVersion,../../packages/utils/tini/Makefile,tini.installer)
+
+ 	# Verify CLI is the same version
+ 	( \
+-		CLI_MAKEFILE="../docker/Makefile"; \
++		CLI_MAKEFILE="../../packages/utils/docker/Makefile"; \
+ 		CLI_VERSION=$$$$( grep --only-matching --perl-regexp '(?<=PKG_VERSION:=)(.*)' "$$$${CLI_MAKEFILE}" ); \
+ 		if [ "$$$${CLI_VERSION}" != "$(PKG_VERSION)" ]; then \
+ 			echo "ERROR: Expected 'PKG_VERSION:=$(PKG_VERSION)' in '$$$${CLI_MAKEFILE}', found 'PKG_VERSION:=$$$${CLI_VERSION}'"; \
+
+--- a/transmission-web-control/Makefile
++++ b/transmission-web-control/Makefile
+@@ -19,7 +19,6 @@ define Package/transmission-web-control
+   SECTION:=net
+   CATEGORY:=Network
+   SUBMENU:=BitTorrent
+-  DEPENDS:=+transmission-daemon
+   CONFLICTS:=transmission-web
+   TITLE:=Transmission Web Control
+   URL:=https://github.com/ronggang/transmission-web-control
