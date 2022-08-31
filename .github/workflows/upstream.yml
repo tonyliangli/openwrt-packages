@@ -208,14 +208,14 @@ jobs:
         net/uugamebooster net/verysync net/vlmcsd net/dnsforwarder net/nps net/tcpping net/redsocks2 sound/forked-daapd
         git_sparse_clone develop "https://github.com/Ysurac/openmptcprouter-feeds" "openmptcp" luci-app-snmpd \
         luci-app-packet-capture luci-app-mail msmtp
-        git_sparse_clone master "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
+        git_sparse_clone openwrt-21.02 "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
         package/kernel/r8168 package/kernel/rtl8189es package/emortal/autocore  package/emortal/automount \
         package/firmware/wireless-regdb
         ) &
 
         svn export --force https://github.com/coolsnowwolf/luci/trunk/applications luciapp
         rm -rf luciapp/{luci-app-qbittorrent,luci-app-cpufreq}
-        git_sparse_clone master "https://github.com/immortalwrt/luci" "immluci" applications protocols/luci-proto-minieap
+        git_sparse_clone openwrt-21.02 "https://github.com/immortalwrt/luci" "immluci" applications protocols/luci-proto-minieap
         mv -n applications/* luciapp/; rm -rf applications
 
         for ipk in $(ls -d luciapp/!(luci-app-rclone|luci-app-mwan3|luci-app-transmission)/); do
@@ -327,6 +327,7 @@ jobs:
         sed -i "s/default n/default y/" dockerd/Config.in
         sed -i "/+uhttpd/d" ariang/Makefile
         cp -f autocore/files/generic/10_system.js luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js
+        cp -f autocore/files/generic/luci luci-base/root/usr/libexec/rpcd/luci
         sed -i -e '$a /etc/bench.log' \
         -e '/\/etc\/profile/d' \
         -e '/\/etc\/shinit/d' \
