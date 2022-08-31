@@ -31,7 +31,7 @@ host.default = "0.0.0.0"
 host.datatype = "ipaddr"
 
 port = e:option(Value, "port", translate("Port"))
-port.default = "8080"
+port.default = "9867"
 port.datatype = "port"
 
 auth_user = e:option(Value, "auth_user", translate("Username"))
@@ -41,6 +41,12 @@ auth_password.password = true
 read_buffer_size = e:option(Value, "read_buffer_size", translate("Read Buffer Size"))
 read_buffer_size.default = "10485760"
 read_buffer_size.datatype = "uinteger"
+
+upload_buffer_size = e:option(Value, "upload_buffer_size", translate("Write Buffer Size"))
+upload_buffer_size.default = "16777216"
+upload_buffer_size.datatype = "uinteger"
+
+
 
 cache_size = e:option(Value, "cache_size", translate("Cache Size"))
 cache_size.default = "1000"
@@ -55,8 +61,8 @@ cache_size = e:option(Value, "proxy_url", translate("Proxy Url"))
 cache_size.default = ""
 
 
-no_trash = e:option(Flag, "no_trash", translate("Delete file permanently instead of trashing"))
-no_trash.rmempty = false
+-- no_trash = e:option(Flag, "no_trash", translate("Delete file permanently instead of trashing"))
+-- no_trash.rmempty = false
 
 
 debug = e:option(Flag, "debug", translate("Debug Mode"))
