@@ -2713,7 +2713,7 @@ msgstr "Redir-Host 模式强制进行远程域名解析"
 msgid "Bypass Gateway Compatible"
 msgstr "旁路网关（旁路由）兼容"
 
-msgid "If The Ntwork Cannot be Connected in Bypass Gateway Mode, Please Try to Enable."
+msgid "If The Network Cannot be Connected in Bypass Gateway Mode, Please Try to Enable."
 msgstr "旁路网关（旁路由）模式下网络无法连接时请尝试启用。"
 
 msgid "Suggestion: If The Device Does Not Have WLAN, Please Disable The Lan Interface's Bridge Option"
@@ -3108,3 +3108,18 @@ msgstr "列表中的域名或 IP 将不会受到绕过中国大陆 IP 选项的�
 
 msgid "Warning: You May Need to Turn off The Rebinding Protection Option of Dnsmasq When Hosts Has Set a Reserved Address"
 msgstr "警告：Hosts 设置了保留地址时可能需要关闭 dnsmasq 的重绑定保护选项才能生效"
+
+msgid "LAN Block Google DNS IP List"
+msgstr "实验性：屏蔽 Google DNS 的局域网设备 IP"
+
+msgid "LAN Block Google DNS Mac List"
+msgstr "实验性：屏蔽 Google DNS 的局域网设备 Mac"
+
+msgid "Auto Select Logic"
+msgstr "自动选择逻辑"
+
+msgid "Urltest"
+msgstr "低延迟优先"
+
+msgid "Random"
+msgstr "随机选择"
