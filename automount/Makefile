@@ -9,56 +9,32 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=automount
 PKG_FLAGS:=nonshared
-PKG_RELEASE:=21
+PKG_RELEASE:=22
 
-PKG_CONFIG_DEPENDS:= \
-	CONFIG_LINUX_5_4 \
-	CONFIG_LINUX_5_10 \
-	CONFIG_LINUX_5_15 \
-	CONFIG_TARGET_ramips
+PKG_CONFIG_DEPENDS:=CONFIG_TARGET_ramips
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/automount
   TITLE:=Mount autoconfig hotplug script.
   MAINTAINER:=Lean
-  DEPENDS:= \
-    +block-mount \
-    +kmod-usb-storage \
-    +kmod-usb-storage-extras \
-    +!TARGET_ramips:kmod-usb-storage-uas \
-    +kmod-fs-ext4 \
-    +!LINUX_5_4:kmod-fs-exfat \
-    +LINUX_5_4:kmod-fs-exfat0 \
-    +kmod-fs-vfat
-    +!LINUX_5_15:ntfs-3g
-    +LINUX_5_15:ntfs3-mount
+  DEPENDS:=+block-mount +kmod-usb-storage +kmod-usb-storage-extras +!TARGET_ramips:kmod-usb-storage-uas \
+	+kmod-fs-vfat +kmod-fs-ext4 +kmod-fs-exfat +ntfs-3g
   PKGARCH:=all
 endef
 
-define Package/ntfs3-mount
-  SECTION:=utils
-  CATEGORY:=Utilities
-  SUBMENU:=Filesystem
-  TITLE:=NTFS mount script for Paragon NTFS3 driver
-  DEPENDS:=+kmod-fs-ntfs3
-  CONFLICTS:=ntfs-3g
-  VARIANT:=ntfs3-mount
-  PKGARCH:=all
+define Package/automount/description
+  A usb autoconfig hotplug script.
 endef
 
 define Build/Compile
+	true
 endef
 
 define Package/automount/install
-	$(INSTALL_DIR) $(1)/etc/hotplug.d/block
-	$(INSTALL_BIN) ./files/15-automount $(1)/etc/hotplug.d/block/
-endef
-
-define Package/ntfs3-mount/install
-	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) ./files/mount.ntfs $(1)/sbin
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./files/15-automount $(1)/etc/15-automount
+	$(INSTALL_BIN) ./files/zzz-move-automount $(1)/etc/uci-defaults/zzz-move-automount
 endef
 
 $(eval $(call BuildPackage,automount))
-$(eval $(call BuildPackage,ntfs3-mount))
