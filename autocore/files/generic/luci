@@ -652,8 +652,9 @@ local methods = {
 	getETHInfo = {
 		call = function()
 			local sys = require "luci.sys"
-			local result = sys.exec("ethinfo 2>/dev/null")
-			return { result = result }
+			local rv = json.parse(sys.exec("/sbin/ethinfo")) or {}
+
+			return { ethinfo = rv }
 		end
 	},
 
