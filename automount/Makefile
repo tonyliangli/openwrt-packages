@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=automount
 PKG_FLAGS:=nonshared
-PKG_RELEASE:=24
+PKG_RELEASE:=25
 
 PKG_CONFIG_DEPENDS:=CONFIG_TARGET_ramips
 
@@ -25,7 +25,7 @@ define Package/automount
     +!TARGET_ramips:kmod-usb-storage-uas \
     +kmod-fs-ext4 \
     +kmod-fs-exfat \
-    +kmod-fs-vfat
+    +kmod-fs-vfat \
     +ntfs3-mount
   PKGARCH:=all
 endef
