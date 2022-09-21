@@ -162,7 +162,6 @@
    URL:=https://github.com/updateing/k3-screen-ctrl
  endef
 
-
 --- a/dockerd/Makefile
 +++ b/dockerd/Makefile
 @@ -83,14 +83,14 @@ define Build/Prepare
@@ -196,7 +195,6 @@
    CONFLICTS:=transmission-web
    TITLE:=Transmission Web Control
    URL:=https://github.com/ronggang/transmission-web-control
-
 
 --- a/fullconenat/Makefile
 +++ b/fullconenat/Makefile
