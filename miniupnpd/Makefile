@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=3.0.20180503
-PKG_RELEASE:=12
+PKG_VERSION:=3.0.20170421
+PKG_RELEASE:=13
 
 # Content-Encoding conflict, can refer to this [issue](https://github.com/miniupnp/miniupnp/issues/605)
 # so switch mirror repo to http://miniupnp.tuxfamily.org
