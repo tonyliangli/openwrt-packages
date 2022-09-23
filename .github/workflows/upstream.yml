@@ -175,13 +175,14 @@ jobs:
         svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
         svn export https://github.com/QiuSimons/OpenWrt-Add/trunk/luci-app-irqbalance
         svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-control-speedlimit
+        svn export https://github.com/x-wrt/packages/trunk/net/miniupnpd
         ) &
         (
         git_sparse_clone openwrt-21.02 "https://github.com/openwrt/packages" "oppackages" \
         utils/cgroupfs-mount utils/coremark utils/watchcat utils/dockerd net/nginx net/uwsgi net/ddns-scripts admin/netdata
         git_sparse_clone master "https://github.com/openwrt/packages" "oppackages" \
         net/smartdns net/ariang net/transmission-web-control
-        git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" net/miniupnpd net/mwan3 multimedia/UnblockNeteaseMusic-Go \
+        git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" net/mwan3 multimedia/UnblockNeteaseMusic-Go \
         multimedia/UnblockNeteaseMusic net/amule net/baidupcs-web net/frp multimedia/gmediarender net/go-aliyundrive-webdav \
         net/qBittorrent-static net/qBittorrent net/transmission libs/qtbase libs/qttools libs/rblibtorrent \
         net/uugamebooster net/verysync net/vlmcsd net/dnsforwarder net/nps net/tcpping net/redsocks2 net/netatalk sound/forked-daapd
@@ -192,7 +193,7 @@ jobs:
         package/network/services/dnsmasq package/libs/openssl
         git_sparse_clone openwrt-21.02 "https://github.com/openwrt/luci" "opluci" applications/luci-app-attendedsysupgrade applications/luci-app-aria2 \
         applications/luci-app-ddns applications/luci-app-acme applications/luci-app-opkg applications/luci-app-firewall \
-        applications/luci-app-ksmbd applications/luci-app-samba4 applications/luci-app-upnp applications/luci-app-watchcat modules/luci-base modules/luci-mod-network \
+        applications/luci-app-ksmbd applications/luci-app-samba4 applications/luci-app-watchcat modules/luci-base modules/luci-mod-network \
         modules/luci-mod-status modules/luci-mod-system
         ) &
         (
