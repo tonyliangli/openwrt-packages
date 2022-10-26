@@ -1,0 +1,7 @@
+--- a/automount/Makefile
++++ b/automount/Makefile
+@@ -55,4 +55,3 @@ define Package/ntfs3-mount/install
+ endef
+ 
+ $(eval $(call BuildPackage,automount))
+-$(eval $(call BuildPackage,ntfs3-mount))

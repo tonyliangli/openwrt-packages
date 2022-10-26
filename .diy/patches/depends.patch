@@ -65,22 +65,37 @@
    CATEGORY:=Base system
    TITLE:=OpenWrt C Firewall
 -  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +kmod-ipt-nat
-+  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libiptext +IPV6:libiptext6 +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +kmod-ipt-nat +kmod-ipt-nat6 +iptables-mod-fullconenat +ip6tables-mod-fullconenat +iptables +ip6tables +kmod-ipt-offload
++  DEPENDS:=+libubox +libubus +libuci +libip4tc +IPV6:libip6tc +libiptext +IPV6:libiptext6 +libxtables +kmod-ipt-core +kmod-ipt-conntrack +IPV6:kmod-nf-conntrack6 +kmod-ipt-nat +kmod-ipt-nat6 +iptables-mod-fullconenat +ip6tables-mod-fullconenat +iptables +ip6tables +kmod-ipt-offload +miniupnpd-iptables
  endef
  
  define Package/firewall/description
 
+--- a/luci-app-bypass/root/etc/init.d/bypass
++++ b/luci-app-bypass/root/etc/init.d/bypass
+@@ -702,8 +702,9 @@ gen_dns(){
+ 	cat >$DNS_T <<-EOF
+ 		force-AAAA-SOA yes
+ 		speed-check-mode none
++		force-qtype-SOA 65
+ 		cache-size 0
+ 		cache-persist no
+ 		log-level fatal
+ 		log-file $LOG
+ 	EOF
+
 --- a/luci-app-passwall/Makefile
 +++ b/luci-app-passwall/Makefile
-@@ -33,7 +33,7 @@ LUCI_TITLE:=LuCI support for PassWall
- LUCI_PKGARCH:=all
+@@ -36,6 +36,7 @@ LUCI_PKGARCH:=all
  LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
  	+dns2socks +dns2tcp +ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc \
--	+microsocks +resolveip +tcping +unzip \
-+	+microsocks +resolveip +tcping +unzip +ipset +iptables-mod-iprange +iptables-mod-socket +iptables-mod-tproxy +iptables-mod-conntrack-extra +kmod-ipt-nat \
+ 	+microsocks +resolveip +tcping +unzip \
++	+ipset +ipt2socks +iptables-mod-conntrack-extra +iptables-mod-iprange +iptables-mod-socket +iptables-mod-tproxy +kmod-ipt-nat \
  	+PACKAGE_$(PKG_NAME)_INCLUDE_Brook:brook \
  	+PACKAGE_$(PKG_NAME)_INCLUDE_ChinaDNS_NG:chinadns-ng \
  	+PACKAGE_$(PKG_NAME)_INCLUDE_Haproxy:haproxy \
+
+ define Package/$(PKG_NAME)/config
+ 	if PACKAGE_$(PKG_NAME)
 
 --- a/luci-app-passwall2/Makefile
 +++ b/luci-app-passwall2/Makefile
@@ -219,3 +234,35 @@
  LUCI_PKGARCH:=all
 
  PKG_NAME:=luci-app-easymesh
+
+--- a/phtunnel/Makefile
++++ b/phtunnel/Makefile
+@@ -36,7 +36,6 @@ PKG_SOURCE:=phtunnel
+ PKG_SOURCE_URL:=https://mirrors.oray.com/orayos/packages/$(PKG_NAME)/$(PKG_ARCH_PHT)/$(PKG_VERSION)/bin
+ PKG_HASH:=skip
+ 
+-PKG_FLAGS:=nonshared
+ PKG_MAINTAINER:=Oray <developer@oray.com>
+ 
+ include $(INCLUDE_DIR)/package.mk
+
+--- a/pgyvpn/Makefile
++++ b/pgyvpn/Makefile
+@@ -36,7 +36,6 @@ PKG_SOURCE:=pgyvpnsvr
+ PKG_SOURCE_URL:=https://mirrors.oray.com/orayos/packages/$(PKG_NAME)/$(PKG_ARCH_PGYYPN)/$(PKG_VERSION)/bin
+ PKG_HASH:=skip
+ 
+-PKG_FLAGS:=nonshared
+ PKG_MAINTAINER:=Oray <developer@oray.com>
+ 
+ include $(INCLUDE_DIR)/package.mk
+
+--- a/luci-app-upnp/Makefile
++++ b/luci-app-upnp/Makefile
+@@ -7,7 +7,6 @@
+ include $(TOPDIR)/rules.mk
+ 
+ LUCI_TITLE:=Universal Plug & Play configuration module
+-LUCI_DEPENDS:=+miniupnpd
+ 
+ include $(TOPDIR)/feeds/luci/luci.mk
