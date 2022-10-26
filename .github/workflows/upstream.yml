@@ -188,7 +188,7 @@ jobs:
         net/smartdns net/ariang net/transmission-web-control
         git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" net/miniupnpd net/mwan3 multimedia/UnblockNeteaseMusic-Go \
         multimedia/UnblockNeteaseMusic net/amule net/baidupcs-web net/frp multimedia/gmediarender net/go-aliyundrive-webdav \
-        net/qBittorrent-static net/qBittorrent net/transmission net/phtunne libs/qtbase libs/qttools libs/rblibtorrent \
+        net/qBittorrent-static net/qBittorrent net/transmission net/phtunnel libs/qtbase libs/qttools libs/rblibtorrent \
         net/uugamebooster net/verysync net/vlmcsd net/dnsforwarder net/nps net/tcpping net/redsocks2 net/netatalk net/pgyvpn sound/forked-daapd
         mv -f miniupnpd miniupnpd-iptables
         ) &
@@ -214,7 +214,7 @@ jobs:
         luci-app-packet-capture luci-app-mail msmtp
         git_sparse_clone master "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
         package/kernel/r8168 package/kernel/rtl8821cu package/network/utils/fullconenat package/firmware/wireless-regdb
-        git_sparse_clone openwrt-21.02 "https://github.com/immortalwrt/immortalwrt" "immortal" package/emortal/autocore package/emortal/automount
+        git_sparse_clone f834fa99cec64cc4737df2055340bc59dc092754 "https://github.com/immortalwrt/immortalwrt" "immortal" package/emortal/autocore package/emortal/automount
         ) &
 
         git_sparse_clone master "https://github.com/coolsnowwolf/luci" "leluci" applications libs/luci-lib-fs
