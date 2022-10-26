@@ -69,11 +69,8 @@
  
  case "$DISTRIB_TARGET" in
  "x86"/*)
-@@ -47,8 +47,9 @@ case "$DISTRIB_TARGET" in
- 	if grep -q "GenuineIntel" "/proc/cpuinfo"; then
- 		cpu_temp="$(sensors "coretemp-*" 2>"/dev/null" | grep -E "(Package id |Core )" | grep -Eo "\+[0-9.]*°C" | head -n1 | tr -d "+")"
--	else grep -q "AuthenticAMD" "/proc/cpuinfo"; then
-+	elif grep -q "AuthenticAMD" "/proc/cpuinfo"; then
+@@ -49,6 +49,7 @@ case "$DISTRIB_TARGET" in
+ 	elif grep -q "AuthenticAMD" "/proc/cpuinfo"; then
  		cpu_temp="$(sensors "k*temp-*" 2>"/dev/null" | awk '/Tdie/ {print $2}' | head -n1 | tr -d "+")"
  	fi
 +	[ -n "${cpu_temp}" ] || cpu_temp="$(sensors 2>/dev/null | grep 'Core 0' | cut -c12-)"
