@@ -355,7 +355,7 @@ return view.extend({
 
 		}		
 
-		var info = _('Configuration modem frequency bands. More information about the modemband application on the') + ' <a href="https://eko.one.pl/?p=openwrt-modemband" target="_blank">' + _('eko.one.pl forum') + '</a>.';
+		var info = _('Configuration modem frequency bands. More information about the modemband application on the %seko.one.pl forum%s.').format('<a href="https://eko.one.pl/?p=openwrt-modemband" target="_blank">', '</a>');
 
 		m = new form.JSONMap(this.formdata, _('Configure modem bands'), info);
 
@@ -469,6 +469,11 @@ return view.extend({
 				var mrestart = (uci.get('modemband', '@modemband[0]', 'modemrestart'));
 				var cmdrestart = (uci.get('modemband', '@modemband[0]', 'restartcmd'));
 				var wname = (uci.get('modemband', '@modemband[0]', 'iface'));
+				
+				if (wname.includes('@')) {
+					wname = wname.replace(/@/g, '')
+				};
+				
 				var sport = (uci.get('modemband', '@modemband[0]', 'set_port'));
 
 				var nuser = (uci.get('modemband', '@modemband[0]', 'notify'));
