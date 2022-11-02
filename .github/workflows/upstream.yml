@@ -11,7 +11,7 @@ on:
     paths:
       - '.github/workflows/upstream.yml'
       - '.gitignore'
-      - '.z/**'
+      - '.github/diy/**'
   schedule:
     - cron: 0 */12 * * *
   workflow_dispatch:
@@ -27,7 +27,7 @@ on:
 jobs:
   merge:
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-22.04
 
     steps:
     - name: Checkout
@@ -40,12 +40,13 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         sudo timedatectl set-timezone "Asia/Shanghai"
+        ( sudo -E apt-get -qq install rename ) &
 
     - name: Syn upstream
       run: |
         shopt -s extglob
         git rm -r --cache * >/dev/null 2>&1 &
-        rm -rf `find ./* -maxdepth 0 -type d ! -name ".z"` >/dev/null 2>&1
+        rm -rf `find ./* -maxdepth 0 -type d ! -name ".github/diy"` >/dev/null 2>&1
         function git_clone() (
           git clone --depth 1 $1 $2 || true
         )
@@ -82,7 +83,7 @@ jobs:
         git_clone https://github.com/xiaorouji/openwrt-passwall && mvdir openwrt-passwall
         git_clone https://github.com/fw876/helloworld && mvdir helloworld
         git_clone https://github.com/Lienol/openwrt-package liep
-        git_clone https://github.com/ysc3839/openwrt-minieap
+        git clone https://github.com/AutoCONFIG/minieap-openwrt -b default
         git_clone https://github.com/rufengsuixing/luci-app-autoipsetadder
         git_clone https://github.com/NateLol/luci-app-beardropper
         git_clone https://github.com/riverscn/openwrt-iptvhelper && mvdir openwrt-iptvhelper
@@ -174,6 +175,7 @@ jobs:
         git_clone https://github.com/sirpdboy/luci-app-ddns-go ddns-go && mvdir ddns-go
         git_clone https://github.com/CHN-beta/rkp-ipid
         git_clone https://github.com/Erope/openwrt_nezha nezha && mvdir nezha
+        git_clone https://github.com/immortalwrt/homeproxy
         # git_clone https://github.com/wiwizcom/WiFiPortal && mvdir WiFiPortal
         # git_clone https://github.com/lazywalker/mmdvm-openwrt && mvdir mmdvm-openwrt
         ) &
@@ -238,7 +240,9 @@ jobs:
         mv -n lean/* ./ ; rm -Rf lean
         mv -n liep/* ./ ; rm -Rf liep
         mv -n openwrt-app-actions/applications/* ./;rm -rf openwrt-app-actions
-        cp -rf .z/packages/* ./ || true
+        rename -f "s/Makefile.k/Makefile/" .github/diy/packages/*/Makefile.k
+        cp -rf .github/diy/packages/* ./ || true
+        rename -f "s/Makefile/Makefile.k/" .github/diy/packages/*/Makefile
         rm -Rf */.git
 
     - name: SSH connection to Actions
@@ -247,7 +251,7 @@ jobs:
 
     - name: Apply patches
       run: |
-        find ".z/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 -E --forward --no-backup-if-mismatch" || (curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=❌ 软件包更新失败 😂 https://github.com/kiddin9/openwrt-packages/actions" "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage";exit 1)
+        find ".github/diy/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 -E --forward --no-backup-if-mismatch" || (curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=❌ 软件包更新失败 😂 https://github.com/kiddin9/openwrt-packages/actions" "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage";exit 1)
 
     - name: Modify
       run: |
@@ -311,8 +315,8 @@ jobs:
         ) &
 
         (
-        bash .z/create_acl_for_luci.sh -a >/dev/null 2>&1 || true
-        bash .z/convert_translation.sh -a >/dev/null 2>&1 || true
+        bash .github/diy/create_acl_for_luci.sh -a >/dev/null 2>&1 || true
+        bash .github/diy/convert_translation.sh -a >/dev/null 2>&1 || true
         
         #sed -i 's?"http://" + window.location.hostname?window.location.protocol + "//" + window.location.hostname?g' `find luci-app*/luasrc/view/ -maxdepth 2 -name "*.htm"`
         rm -f miniupnpd/patches/106-spam-syslog*
@@ -330,8 +334,6 @@ jobs:
         sed -i "s/PKG_VERSION:=2/PKG_VERSION:=3/" mwan3/Makefile
         sed -i "s/default n/default y/" dockerd/Config.in
         sed -i "/+uhttpd/d" ariang/Makefile
-        cp -f autocore/files/generic/10_system.js luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js
-        cp -f autocore/files/generic/luci luci-base/root/usr/libexec/rpcd/luci
         sed -i -e '$a /etc/bench.log' \
         -e '/\/etc\/profile/d' \
         -e '/\/etc\/shinit/d' \
