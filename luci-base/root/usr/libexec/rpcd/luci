@@ -210,7 +210,7 @@ local methods = {
 
 			rv.firewall      = fs.access("/sbin/fw3")
 			rv.opkg          = fs.access("/bin/opkg")
- 			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt") or fs.access("/sys/module/nft_flow_offload/refcnt")
+			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt")
 			rv.fullconenat   = fs.access("/lib/modules/" .. kernel_version .. "/xt_FULLCONENAT.ko") or fs.access("/lib/modules/" .. kernel_version .. "/nft_fullcone.ko")
 			rv.br2684ctl     = fs.access("/usr/sbin/br2684ctl")
 			rv.swconfig      = fs.access("/sbin/swconfig")
@@ -644,7 +644,7 @@ local methods = {
 			local sys = require "luci.sys"
 			local cpuusage = {}
 
-			cpuusage.cpuusage = sys.exec("top -n1 | awk '/^CPU/ {printf(\"%d%%\", 100 - $8)}'") or "6%"
+			cpuusage.cpuusage = sys.exec("top -n1 | awk '/^CPU/ {printf(\"%d%\", 100 - $8)}'") or "6%"
 			return cpuusage
 		end
 	},
