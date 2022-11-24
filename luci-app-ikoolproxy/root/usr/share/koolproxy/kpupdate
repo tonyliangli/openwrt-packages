@@ -128,8 +128,8 @@ update_rules() {
 # 			RESTART_KOOLPROXY=true
 # 		fi
 	done
-	__compare_file "koolproxy_ipset.conf" "$KP_DIR/koolproxy_ipset.conf" "https://cdn.jsdelivr.net/gh/yaof2/koolproxy@main/rules/koolproxy_ipset.conf"
-	__compare_file "dnsmasq.adblock" "$KP_DIR/dnsmasq.adblock" "https://cdn.jsdelivr.net/gh/yaof2/koolproxy@main/rules/dnsmasq.adblock"
+	__compare_file "koolproxy_ipset.conf" "$KP_DIR/koolproxy_ipset.conf" "https://cdn.jsdelivr.net/gh/ilxp/koolproxy@main/rules/koolproxy_ipset.conf"
+	__compare_file "dnsmasq.adblock" "$KP_DIR/dnsmasq.adblock" "https://cdn.jsdelivr.net/gh/ilxp/koolproxy@main/rules/dnsmasq.adblock"
 	RESTART_KOOLPROXY=true    # always restart koolproxy
 }
 
