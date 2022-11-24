@@ -5,10 +5,12 @@
 
 | CPU架构           | 下载地址                                             | 适用设备    | 软件源    | 更新频率    |
 |----------------|-----------------------------------------------------|--------------------------------------|-----------|-----------|
-| X86_64         | [📥](https://op.supes.top/packages/x86_64/)         |          PC软路由    | src/gz openwrt_kiddin9 https://op.supes.top/packages/x86_64 | 日更  |
+| X86_64         | [📥](https://op.supes.top/packages/x86_64/)         |          64位PC软路由    | src/gz openwrt_kiddin9 https://op.supes.top/packages/x86_64 | 日更  |
+| i386_pentium4  | [📥](https://op.supes.top/packages/i386_pentium4/)      |      32位PC软路由    | src/gz openwrt_kiddin9 https://op.supes.top/packages/i386_pentium4 | 日更  |
 | aarch64_generic    | [📥](https://op.supes.top/packages/aarch64_generic/)     |   R2S/R4S等        |  src/gz openwrt_kiddin9 https://op.supes.top/packages/aarch64_generic | 日更  |
 | aarch64_cortex-a72    | [📥](https://op.supes.top/packages/aarch64_cortex-a72/)     |  树莓派4B等   |  src/gz openwrt_kiddin9 https://op.supes.top/packages/aarch64_cortex-a72  |  日更 |
 | mipsel_24kc    | [📥](https://op.supes.top/packages/mipsel_24kc/)     |  k2p,ac2100等 | src/gz openwrt_kiddin9 https://op.supes.top/packages/mipsel_24kc   | 日更  |
+| mips_24kc    | [📥](https://op.supes.top/packages/mips_24kc/)     |  GL-AR300M,NETGEAR WNDR4300等 | src/gz openwrt_kiddin9 https://op.supes.top/packages/mips_24kc   | 日更  |
 | aarch64_cortex-a53    | [📥](https://op.supes.top/packages/aarch64_cortex-a53/) |  N1,红米AX6,小米AX6S等 |  src/gz openwrt_kiddin9 https://op.supes.top/packages/aarch64_cortex-a53 |   日更 |
 | arm_cortex-a9    | [📥](https://op.supes.top/packages/arm_cortex-a9/) |  斐讯K3,华硕RT-AC68U,RT-AC88U等 |  src/gz openwrt_kiddin9 https://op.supes.top/packages/arm_cortex-a9 |   日更 |
 | arm_cortex-a7_neon-vfpv4    | [📥](https://op.supes.top/packages/arm_cortex-a7_neon-vfpv4/) |  华硕RT-ACRH17,RT-AC58U等 |  src/gz openwrt_kiddin9 https://op.supes.top/packages/arm_cortex-a7_neon-vfpv4 |   日更 |
