@@ -231,7 +231,7 @@ jobs:
         git_sparse_clone develop "https://github.com/Ysurac/openmptcprouter-feeds" "openmptcp" luci-app-snmpd \
         luci-app-packet-capture luci-app-mail msmtp
         git_sparse_clone master "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
-        package/kernel/r8168 package/kernel/rtl8821cu package/network/utils/fullconenat package/utils/mhz package/firmware/wireless-regdb
+        package/kernel/r8168 package/kernel/rtl8821cu package/kernel/rtl8189es package/network/utils/fullconenat package/utils/mhz package/firmware/wireless-regdb
         git_sparse_clone openwrt-21.02 "https://github.com/immortalwrt/immortalwrt" "immortal" package/emortal/autocore package/emortal/automount
         ) &
 
