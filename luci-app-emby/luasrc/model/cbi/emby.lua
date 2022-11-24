@@ -23,9 +23,8 @@ o.default = 0
 o.rmempty = false
 
 o = s:option(Value, "http_port", translate("HTTP Port").."<b>*</b>")
-o.rmempty = false
-o.default = "8096"
-o.datatype = "string"
+o.default = "8097"
+o.datatype = "port"
 o:depends("hostnet", 0)
 
 o = s:option(Value, "image_name", translate("Image").."<b>*</b>")
@@ -49,7 +48,7 @@ for _, val in pairs(paths) do
 end
 o.default = default_path
 
-o = s:option(Value, "media_path", translate("Media path"), translate("Not required, all disk is mounted in") .. " <a href='/cgi-bin/luci/admin/services/linkease/file#/?path=/root/mnt' target='_blank'>/mnt</a>")
+o = s:option(Value, "media_path", translate("Media path"), translate("Not required, all disk is mounted in") .. " <a href='/cgi-bin/luci/admin/services/linkease/file/?path=/root/mnt' target='_blank'>/mnt</a>")
 o.datatype = "string"
 
 o = s:option(Value, "cache_path", translate("Transcode cache path"), translate("Default use 'transcodes' in 'config path' if not set, please make sure there has enough space"))

@@ -6,7 +6,7 @@ local taskd = require "luci.model.tasks"
 local jellyfin_model = require "luci.model.jellyfin"
 local m, s, o
 
-m = taskd.docker_map("jellyfin", "jellyfin", "/usr/share/jellyfin/install.sh",
+m = taskd.docker_map("jellyfin", "jellyfin", "/usr/libexec/istorec/jellyfin.sh",
 	translate("Jellyfin"),
 	translate("Jellyfin is the volunteer-built media solution that puts you in control of your media. Stream to any device from your own server, with no strings attached. Your media, your server, your way.")
 		.. translate("Official website:") .. ' <a href=\"https://jellyfin.org/\" target=\"_blank\">https://jellyfin.org/</a>')
@@ -40,7 +40,7 @@ for _, val in pairs(paths) do
 end
 o.default = default_path
 
-o = s:option(Value, "media_path", translate("Media path"), translate("Not required, all disk is mounted in") .. " <a href='/cgi-bin/luci/admin/services/linkease/file#/?path=/root/mnt' target='_blank'>/mnt</a>")
+o = s:option(Value, "media_path", translate("Media path"), translate("Not required, all disk is mounted in") .. " <a href='/cgi-bin/luci/admin/services/linkease/file/?path=/root/mnt' target='_blank'>/mnt</a>")
 o.datatype = "string"
 
 o = s:option(Value, "cache_path", translate("Transcode cache path"), translate("Default use 'transcodes' in 'config path' if not set, please make sure there has enough space"))
