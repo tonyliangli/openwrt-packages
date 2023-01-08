@@ -21,7 +21,6 @@
 /wget
 /mt
 /autosamba
-/amule
 /npc
 /fcgiwrap
 /ipv6-helper
@@ -40,3 +39,4 @@
 /qtools
 /libcups
 /nat64
+/dns-proxy
