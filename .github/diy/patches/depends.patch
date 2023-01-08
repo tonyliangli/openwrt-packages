@@ -16,8 +16,8 @@
  PKG_MAINTAINER:=Ansuel Smith <ansuelsmth@gmail.com>
  
  LUCI_TITLE:=LuCI Support for Dynamic DNS Client (ddns-scripts)
--LUCI_DEPENDS:=+luci-lib-ipkg +luci-mod-admin-full +ddns-scripts
-+LUCI_DEPENDS:=+luci-lib-ipkg +luci-mod-admin-full +ddns-scripts +ddns-scripts-aliyun +ddns-scripts-dnspod +ddns-scripts-cloudflare
+-LUCI_DEPENDS:=+luci-mod-admin-full +ddns-scripts
++LUCI_DEPENDS:=+luci-mod-admin-full +ddns-scripts +ddns-scripts-aliyun +ddns-scripts-dnspod +ddns-scripts-cloudflare
  LUCI_PKGARCH:=all
  
  include ../../luci.mk
@@ -82,17 +82,6 @@
  		log-level fatal
  		log-file $LOG
  	EOF
-
---- a/luci-app-passwall/Makefile
-+++ b/luci-app-passwall/Makefile
-@@ -34,6 +34,7 @@ PKG_CONFIG_DEPENDS:= \
- LUCI_TITLE:=LuCI support for PassWall
- LUCI_PKGARCH:=all
- LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
-+	+ipset +ipt2socks +iptables-mod-conntrack-extra +iptables-mod-iprange +iptables-mod-socket +iptables-mod-tproxy +kmod-ipt-nat \
- 	+dns2socks +dns2tcp +ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc \
- 	+microsocks +resolveip +tcping +unzip \
- 	+v2ray-geoip +v2ray-geosite \
 
 --- a/luci-app-passwall2/Makefile
 +++ b/luci-app-passwall2/Makefile
