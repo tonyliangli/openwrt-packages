@@ -243,6 +243,18 @@
  
  include $(INCLUDE_DIR)/package.mk
 
+--- a/miniupnpd/files/miniupnpd.init
++++ b/miniupnpd/files/miniupnpd.init
+@@ -210,3 +210,8 @@
+ }
+ 
++reload_service() {
++	stop
++	start
++}
++
+ start_service() {
+
 --- a/luci-app-openclash/Makefile
 +++ b/luci-app-openclash/Makefile
 @@ -32,7 +32,7 @@ define Package/$(PKG_NAME)
