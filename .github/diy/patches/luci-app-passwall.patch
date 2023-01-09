@@ -126,24 +126,6 @@ diff --git a/luci-app-passwall/luasrc/model/cbi/passwall/client/global.lua b/luc
 index 0c33ccd90f..258da6a551 100644
 --- a/luci-app-passwall/luasrc/model/cbi/passwall/client/global.lua
 +++ b/luci-app-passwall/luasrc/model/cbi/passwall/client/global.lua
-@@ -172,7 +172,7 @@ udp_node:value("tcp", translate("Same as the tcp node"))
- s:tab("DNS", translate("DNS"))
-
- o = s:taboption("DNS", Flag, "filter_proxy_ipv6", translate("Filter Proxy Host IPv6"), translate("Experimental feature."))
--o.default = "0"
-+o.default = "1"
-
- ---- DNS Forward Mode
- dns_mode = s:taboption("DNS", ListValue, "dns_mode", translate("Filter Mode"))
-@@ -268,7 +268,7 @@ o.rmempty = false
- 
- if has_chnlist and api.is_finded("chinadns-ng") then
-     o = s:taboption("DNS", Flag, "chinadns_ng", translate("ChinaDNS-NG"), translate("The effect is better, but will increase the memory."))
--    o.default = "0"
-+    o.default = "1"
- 	o:depends({dns_mode = "dns2socks"})
- 	o:depends({dns_mode = "dns2tcp"})
- 	o:depends({dns_mode = "v2ray", v2ray_dns_mode = "tcp"})
 @@ -431,6 +431,7 @@ for k, v in pairs(nodes_table) do
      end
  end
@@ -299,3 +281,35 @@ index cc39c00a21..079c9723b3 100755
  [ ! -s "/etc/config/passwall" ] && cp -f /usr/share/passwall/0_default_config /etc/config/passwall
  touch /etc/config/passwall_show >/dev/null 2>&1
  rm -f /tmp/luci-indexcache
+
+--- a/luci-app-passwall/root/usr/share/passwall/0_default_config
++++ b/luci-app-passwall/root/usr/share/passwall/0_default_config
+@@ -6,7 +6,8 @@ config global
+ 	option udp_node 'nil'
+ 	option dns_mode 'dns2tcp'
+ 	option remote_dns '1.1.1.1'
+-	option filter_proxy_ipv6 '0'
++	option filter_proxy_ipv6 '1'
++	option chinadns_ng '1'
+ 	option tcp_proxy_mode 'chnroute'
+ 	option udp_proxy_mode 'chnroute'
+ 	option localhost_tcp_proxy_mode 'default'
+@@ -42,7 +43,7 @@ config global_other
+ 	option nodes_ping 'auto_ping tcping'
+ 
+ config global_rules
+-	option auto_update '0'
++	option auto_update '1'
+ 	option chnlist_update '1'
+ 	option chnroute_update '1'
+ 	option chnroute6_update '1'
+@@ -75,7 +76,8 @@ config global_subscribe
+ 	list filter_discard_list '官网'
+ 
+ config auto_switch
+-	option enable '0'
++	option enable '1'
++	option restore_switch '1'
+ 	option testing_time '1'
+ 	option connect_timeout '3'
+ 	option retry_num '3'
