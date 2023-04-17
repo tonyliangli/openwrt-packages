@@ -702,6 +702,7 @@ gen_dns(){
 	cat >$DNS_T <<-EOF
 		force-AAAA-SOA yes
 		speed-check-mode none
+		force-qtype-SOA 65
 		cache-size 0
 		cache-persist no
 		log-level fatal
