@@ -33,12 +33,12 @@ end
 
 o = s:option(Value, "localip", translate("Server IP"), translate("VPN Server IP address, it not required."))
 o.datatype = "ipaddr"
-o.placeholder = translate("10.0.0.1")
+o.placeholder = translate("10.10.10.1")
 o.rmempty = true
 o.default = ""
 
 o = s:option(Value, "remoteip", translate("Client IP"), translate("VPN Client IP address, it not required."))
-o.placeholder = translate("10.0.0.2-254")
+o.placeholder = translate("10.10.10.2-254")
 o.rmempty = true
 o.default = ""
 
