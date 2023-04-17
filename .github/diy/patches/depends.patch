@@ -72,6 +72,19 @@
    PROVIDES:=uci-firewall
  endef
 
+--- a/luci-app-bypass/root/etc/init.d/bypass
++++ b/luci-app-bypass/root/etc/init.d/bypass
+@@ -702,8 +702,9 @@ gen_dns(){
+ 	cat >$DNS_T <<-EOF
+ 		force-AAAA-SOA yes
+ 		speed-check-mode none
++		force-qtype-SOA 65
+ 		cache-size 0
+ 		cache-persist no
+ 		log-level fatal
+ 		log-file $LOG
+ 	EOF
+
 --- a/luci-app-passwall2/Makefile
 +++ b/luci-app-passwall2/Makefile
 @@ -29,7 +29,7 @@ LUCI_PKGARCH:=all
@@ -232,6 +245,18 @@
 -LUCI_DEPENDS:=+miniupnpd
  
  include $(TOPDIR)/feeds/luci/luci.mk
+
+--- a/miniupnpd-iptables/files/miniupnpd.init
++++ b/miniupnpd-iptables/files/miniupnpd.init
+@@ -210,3 +210,8 @@
+ }
+ 
++reload_service() {
++	stop
++	start
++}
++
+ start_service() {
 
 --- a/luci-app-openclash/Makefile
 +++ b/luci-app-openclash/Makefile
