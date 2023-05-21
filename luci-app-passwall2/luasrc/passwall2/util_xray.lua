@@ -42,11 +42,9 @@ function gen_outbound(flag, node, tag, proxy_table)
 
 		local proxy = 0
 		local proxy_tag = "nil"
-		local dialerProxy = nil
 		if proxy_table ~= nil and type(proxy_table) == "table" then
 			proxy = proxy_table.proxy or 0
 			proxy_tag = proxy_table.tag or "nil"
-			dialerProxy = proxy_table.dialerProxy
 		end
 
 		if node.type == "V2ray" or node.type == "Xray" then
@@ -54,18 +52,10 @@ function gen_outbound(flag, node, tag, proxy_table)
 			else
 				proxy = 0
 				if proxy_tag ~= "nil" then
-					if dialerProxy and dialerProxy == "1" then
-						node.streamSettings = {
-							sockopt = {
-								dialerProxy = proxy_tag
-							}
-						}
-					else
-						node.proxySettings = {
-							tag = proxy_tag,
-							transportLayer = true
-						}
-					end
+					node.proxySettings = {
+						tag = proxy_tag,
+						transportLayer = true
+					}
 				end
 			end
 		end
@@ -108,9 +98,16 @@ function gen_outbound(flag, node, tag, proxy_table)
 
 		if node.protocol == "wireguard" and node.wireguard_reserved then
 			local bytes = {}
-			node.wireguard_reserved:gsub("[^,]+", function(b)
-				bytes[#bytes+1] = tonumber(b)
-			end)
+			if not node.wireguard_reserved:match("[^%d,]+") then
+				node.wireguard_reserved:gsub("%d+", function(b)
+					bytes[#bytes + 1] = tonumber(b)
+				end)
+			else
+				local result = api.bin.b64decode(node.wireguard_reserved)
+				for i = 1, #result do
+					bytes[i] = result:byte(i)
+				end
+			end
 			node.wireguard_reserved = #bytes > 0 and bytes or nil
 		end
 
@@ -122,14 +119,14 @@ function gen_outbound(flag, node, tag, proxy_table)
 			proxySettings = node.proxySettings or nil,
 			protocol = node.protocol,
 			mux = {
-				enabled = (node.mux == "1") and true or false,
-				concurrency = (node.mux_concurrency) and tonumber(node.mux_concurrency) or 8
+				enabled = (node.mux == "1" or node.xmux == "1") and true or false,
+				concurrency = (node.mux == "1" and ((node.mux_concurrency) and tonumber(node.mux_concurrency) or 8)) or ((node.xmux == "1") and -1) or nil,
+				xudpConcurrency = (node.xmux == "1" and ((node.xudp_concurrency) and tonumber(node.xudp_concurrency) or 8)) or nil
 			} or nil,
 			-- 底层传输配置
 			streamSettings = (node.streamSettings or node.protocol == "vmess" or node.protocol == "vless" or node.protocol == "socks" or node.protocol == "shadowsocks" or node.protocol == "trojan") and {
 				sockopt = {
-					mark = 255,
-					dialerProxy = (node.streamSettings and dialerProxy and dialerProxy == "1") and node.streamSettings.sockopt.dialerProxy or nil
+					mark = 255
 				},
 				network = node.transport,
 				security = node.stream_security,
@@ -655,7 +652,7 @@ function gen_config(var)
 					end
 				end
 				if default_node and api.is_normal_node(default_node) then
-					local default_outbound = gen_outbound(flag, default_node, "default", { proxy = proxy, tag = proxy_tag, dialerProxy = node.dialerProxy })
+					local default_outbound = gen_outbound(flag, default_node, "default", { proxy = proxy, tag = proxy_tag })
 					if default_outbound then
 						table.insert(outbounds, default_outbound)
 						default_outboundTag = "default"
@@ -720,7 +717,7 @@ function gen_config(var)
 											})
 										end
 									end
-									local _outbound = gen_outbound(flag, _node, name, { proxy = (proxy_tag ~= "nil") and 1 or 0, tag = (proxy_tag ~= "nil") and proxy_tag or nil, dialerProxy = node.dialerProxy })
+									local _outbound = gen_outbound(flag, _node, name, { proxy = (proxy_tag ~= "nil") and 1 or 0, tag = (proxy_tag ~= "nil") and proxy_tag or nil })
 									if _outbound then
 										table.insert(outbounds, _outbound)
 										outboundTag = name
@@ -877,7 +874,7 @@ function gen_config(var)
 
 	end
 	
-	if remote_dns_udp_server or remote_dns_fake then
+	if remote_dns_udp_server then
 		local rules = {}
 		local _remote_dns_proto
 	
@@ -923,16 +920,18 @@ function gen_config(var)
 		end
 	
 		if true then
-			local _remote_dns = {
-				_flag = "remote",
-				domains = #dns_remote_domains > 0 and dns_remote_domains or nil
-				--expectIPs = #dns_remote_expectIPs > 0 and dns_remote_expectIPs or nil
-			}
-	
 			if remote_dns_udp_server then
-				_remote_dns.address = remote_dns_udp_server
-				_remote_dns.port = tonumber(remote_dns_port) or 53
+				local _remote_dns = {
+					_flag = "remote",
+					address = remote_dns_udp_server,
+					port = tonumber(remote_dns_port) or 53
+				}
+				if not remote_dns_fake then
+					_remote_dns.domains = #dns_remote_domains > 0 and dns_remote_domains or nil
+					--_remote_dns.expectIPs = #dns_remote_expectIPs > 0 and dns_remote_expectIPs or nil
+				end
 				_remote_dns_proto = "udp"
+				table.insert(dns.servers, _remote_dns)
 	
 				table.insert(routing.rules, 1, {
 					type = "field",
@@ -944,7 +943,6 @@ function gen_config(var)
 					outboundTag = "direct"
 				})
 			end
-	
 			if remote_dns_fake then
 				fakedns = {}
 				fakedns[#fakedns + 1] = {
@@ -957,10 +955,14 @@ function gen_config(var)
 						poolSize = 65535
 					}
 				end
-				_remote_dns.address = "fakedns"
+				local _remote_dns = {
+					_flag = "remote_fakedns",
+					address = "fakedns",
+					domains = #dns_remote_domains > 0 and dns_remote_domains or nil
+					--expectIPs = #dns_remote_expectIPs > 0 and dns_remote_expectIPs or nil
+				}
+				table.insert(dns.servers, _remote_dns)
 			end
-	
-			table.insert(dns.servers, _remote_dns)
 		end
 	
 		if true then
@@ -1061,6 +1063,10 @@ function gen_config(var)
 			local dns_servers = nil
 			for index, value in ipairs(dns.servers) do
 				if not dns_servers and value["_flag"] == default_dns_flag then
+					if value["_flag"] == "remote" and remote_dns_fake then
+						value["_flag"] = "default"
+						break
+					end
 					dns_servers = {
 						_flag = "default",
 						address = value.address,
@@ -1071,6 +1077,15 @@ function gen_config(var)
 			end
 			if dns_servers then
 				table.insert(dns.servers, 1, dns_servers)
+			end
+
+			for i = #dns.servers, 1, -1 do
+				local v = dns.servers[i]
+				if v["_flag"] ~= "default" then
+					if not v.domains or #v.domains == 0 then
+						table.remove(dns.servers, i)
+					end
+				end
 			end
 		end
 	

@@ -1,64 +1,97 @@
-name: C/C++ CI
+name: Build OpenWRT Package
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   build:
-
+    name: Build ${{ matrix.arch }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: aarch64_cortex-a53
+            target: mvebu-cortexa53
+
+          - arch: aarch64_cortex-a72
+            target: mvebu-cortexa72
+
+          - arch: aarch64_generic
+            target: rockchip-armv8
+
+          - arch: arm_cortex-a7_neon-vfpv4
+            target: ipq40xx-generic
+
+          - arch: arm_cortex-a9_vfpv3-d16
+            target: mvebu-cortexa9
+
+          - arch: arm_cortex-a15_neon-vfpv4
+            target: armvirt-32
+
+          - arch: i386_pentium4
+            target: x86-generic
+
+          - arch: i386_pentium-mmx
+            target: x86-geode
+
+          - arch: mips_24kc
+            target: ath79-generic
+
+          - arch: mipsel_24kc
+            target: mt7621
+
+          - arch: powerpc_464fp
+            target: apm821xx-nand
+
+          - arch: powerpc_8548
+            target: mpc85xx-p1010
+
+          - arch: x86_64
+            target: x86-64
 
     steps:
-
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
+      - uses: actions/checkout@v3
         with:
-          format: YYYYMMDDTHHmmss
-          utcOffset: "+08:00"
+          fetch-depth: 0
 
-      - name: Setup Environment
-        run: |
-          sudo apt-fast update
-          sudo apt-fast -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
+      - name: Build
+        uses: openwrt/gh-action-sdk@v5
+        env:
+          ARCH: ${{ matrix.arch }}
+          FEEDNAME: packages_ci
+          PACKAGES: openwrt
 
-      - uses: actions/cache@v2
-        id: cache
+      - name: Move created packages to project dir
+        run: cp bin/packages/${{ matrix.arch }}/packages_ci/*.ipk . || true
+
+      - name: Store packages
+        uses: actions/upload-artifact@v3
+        if: "!startsWith(github.ref, 'refs/tags/v')"
         with:
-          path: openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64
-          key: ${{ runner.os }}-openwrt
-          restore-keys: |
-            ${{ runner.os }}-openwrt
+          name: ${{ matrix.arch}}-${{ github.sha}}-packages
+          path: "*.ipk"
 
-      - name: Setup OpenWRT SDK
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          wget https://downloads.openwrt.org/releases/21.02.0-rc1/targets/ramips/mt7620/openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-          tar -xvJf openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-          cd openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Upload packages
+        uses: svenstaro/upload-release-action@v2
+        if: "startsWith(github.ref, 'refs/tags/v')"
         with:
-          path: openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64/package/UA2F
+          repo_token: ${{ github.token }}
+          file: "*.ipk"
+          tag: ${{ github.ref }}
+          file_glob: true
 
-      - name: Compile Package
-        working-directory: ./openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64
-        run: |
-          make defconfig
-          make package/UA2F/compile -j2 V=s
-
-      - name: Release Package
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Store logs
+        uses: actions/upload-artifact@v3
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ steps.current-time.outputs.formattedTime }}"
-          prerelease: true
-          files: |
-            openwrt-sdk-21.02.0-rc1-ramips-mt7620_gcc-8.4.0_musl.Linux-x86_64/bin/packages/mipsel_24kc/base/ua2f*
+          name: ${{ matrix.arch}}-${{ github.sha }}-logs
+          path: logs/
 
-
-
-
+      - name: Remove logs
+        run: sudo rm -rf logs/ || true
