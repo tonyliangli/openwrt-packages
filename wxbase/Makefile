@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wxbase
 PKG_VERSION:=3.2.2.1
-PKG_RELEASE:=13
+PKG_RELEASE:=15
 
 PKG_SOURCE:=wxWidgets-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/wxWidgets/wxWidgets/releases/download/v$(PKG_VERSION)
@@ -22,12 +22,14 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+DISABLE_NLS:=
+
 define Package/libwxbase
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Cross-platform C++ framework
   URL:=http://www.wxwidgets.org/
-  DEPENDS:=+libexpat +libstdcpp +zlib +libpthread +libcurl
+  DEPENDS:=+libexpat +libstdcpp +zlib +libpcre2-32 +libcurl
 endef
 
 define Package/libwxbase/description
@@ -94,8 +96,6 @@ CONFIGURE_ARGS += \
 	--without-wine \
 	--without-x \
 	--without-x11
-
-CONFIGURE_ARGS := $(filter-out --disable-nls, $(CONFIGURE_ARGS))
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
