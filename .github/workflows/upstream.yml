@@ -174,7 +174,7 @@ jobs:
         git_clone https://github.com/jjm2473/openwrt-apps && rm -rf openwrt-apps/{luci-app-cpufreq,luci-app-ota,luci-alias.mk} && sed -i "s/luci-alias.mk/..\/luci.mk/" openwrt-apps/*/Makefile && mvdir openwrt-apps
         ) &
         (
-        git_clone https://github.com/tty228/luci-app-serverchan
+        git_clone https://github.com/tty228/luci-app-wechatpush
         git_clone https://github.com/4IceG/luci-app-sms-tool smstool && mvdir smstool
         git_clone https://github.com/4IceG/luci-app-modemband modemb  && mv -n modemb/* ./;rm -rf modemb
         git_clone https://github.com/ZeaKyX/speedtest-web
@@ -218,6 +218,7 @@ jobs:
         git_clone https://github.com/pexcn/openwrt-dns2tcp dns2tcp
         git_clone https://github.com/BoringCat/luci-app-minieap
         git_clone https://github.com/izilzty/luci-app-chinadns-ng
+        git_clone https://github.com/Diciya/luci-app-broadbandacc
         ) &
         (
         svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
@@ -237,7 +238,7 @@ jobs:
         mv -f miniupnpd miniupnpd-iptables
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "oppackages" \
         utils/coremark utils/watchcat utils/dockerd net/nginx net/uwsgi net/ddns-scripts net/smartdns net/curl \
-        net/ariang admin/netdata net/transmission-web-control net/rp-pppoe net/tailscale
+        net/ariang admin/netdata net/transmission-web-control net/rp-pppoe net/tailscale net/openvpn
         ) &
         (
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/openwrt" "openwrt" \
@@ -267,7 +268,7 @@ jobs:
         git_sparse_clone openwrt-23.05 "https://github.com/immortalwrt/immortalwrt" "immortal" package/kernel/rtl88x2bu \
         package/kernel/r8168 package/kernel/rtl8821cu package/kernel/rtl8189es package/emortal/autocore package/emortal/automount \
         package/network/utils/fullconenat package/network/utils/fullconenat-nft package/network/utils/nftables \
-        package/utils/mhz package/libs/openssl package/libs/libnftnl package/firmware/wireless-regdb
+        package/utils/mhz package/libs/libnftnl package/firmware/wireless-regdb
         ) &
         (
         git_sparse_clone master "https://github.com/x-wrt/com.x-wrt" "x-wrt" luci-app-macvlan luci-app-xwan
