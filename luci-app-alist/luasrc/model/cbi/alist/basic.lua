@@ -14,6 +14,7 @@ o.rmempty = false
 o = s:option(Value, "port", translate("Port"))
 o.datatype = "and(port,min(1))"
 o.rmempty = false
+o.default = "5244"
 
 o = s:option(Flag, "log", translate("Enable Logs"))
 o.default = 1
@@ -33,6 +34,9 @@ o:depends("ssl", "1")
 o = s:option(Flag, "allow_wan", translate("Allow Access From Internet"))
 o.rmempty = false
 
+o = s:option(Value, "site_url", translate("Site URL"), translate("When the web is reverse proxied to a subdirectory, this option must be filled out to ensure proper functioning of the web. Do not include '/' at the end of the URL"))
+o.datatype = "string"
+
 o = s:option(Value, "max_connections", translate("Max Connections"), translate("0 is unlimited, It is recommend to set a low number of concurrency (10-20) for poor performance device"))
 o.datatype = "and(uinteger,min(0))"
 o.default = "0"
@@ -41,6 +45,11 @@ o.rmempty = false
 o = s:option(Value, "token_expires_in", translate("Login Validity Period (hours)"))
 o.datatype = "and(uinteger,min(1))"
 o.default = "48"
+o.rmempty = false
+
+o = s:option(Value, "delayed_start", translate("Delayed Start (seconds)"))
+o.datatype = "and(uinteger,min(0))"
+o.default = "0"
 o.rmempty = false
 
 o = s:option(Value, "temp_dir", translate("Cache directory"))

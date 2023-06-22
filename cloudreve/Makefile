@@ -5,12 +5,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cloudreve
-PKG_VERSION:=3.7.1
-PKG_RELEASE:=28
+PKG_VERSION:=3.8.0
+PKG_RELEASE:=30
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/cloudreve/Cloudreve.git
-PKG_SOURCE_VERSION:=f1722208253fd947b286f365a221bd134b23364b
+PKG_SOURCE_VERSION:=243c312066809954f74d946c44abf8c02c8d3af3
 PKG_MIRROR_HASH:=skip
 
 PKG_LICENSE:=GPL-3.0-only
@@ -19,7 +19,7 @@ PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
 
 PKG_BUILD_DEPENDS:=golang/host node/host node-yarn/host
 PKG_BUILD_PARALLEL:=1
-PKG_USE_MIPS16:=0
+PKG_BUILD_FLAGS:=no-mips16
 
 GO_PKG:=github.com/cloudreve/Cloudreve/v3
 GO_PKG_LDFLAGS_X:= \
@@ -35,7 +35,7 @@ define Package/cloudreve
   SUBMENU:=Cloud Manager
   TITLE:=A project helps you build your own cloud in minutes
   URL:=https://cloudreve.org
-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
+  DEPENDS:=@(aarch64||arm||i386||i686||x86_64) +ca-bundle
 endef
 
 define Package/cloudreve/description
