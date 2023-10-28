@@ -165,10 +165,6 @@ config shunt_rules 'OpenAI'
 	option remarks 'OpenAI'
 	option domain_list 'geosite:openai'	
 
-config shunt_rules 'OpenAI'
-	option remarks 'OpenAI'
-	option domain_list 'geosite:openai'	
-
 config shunt_rules 'Proxy'
 	option remarks 'Proxy'
 	option domain_list 'geosite:geolocation-!cn'
