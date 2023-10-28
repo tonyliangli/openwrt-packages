@@ -40,6 +40,12 @@ function modem_family() {
 			FAMILY=SIERRA
 		elif (echo ${F} | grep -i dell >/dev/null); then
 			FAMILY=DELL
+		elif (echo ${F} | grep -i sty >/dev/null); then
+			FAMILY=STYX
+		elif (echo ${F} | grep -i meig >/dev/null); then
+			FAMILY=MEIGLINK
+		elif (echo ${F} | grep -i mik >/dev/null); then
+			FAMILY=MIKROTIK
 		elif (echo ${F} | grep -i xmm >/dev/null); then
 			FAMILY=INTEL
 		elif (echo ${F} | grep -i sim >/dev/null); then
@@ -52,6 +58,10 @@ function modem_family() {
 			FAMILY=HUAWEI
 		elif (echo ${F} | grep -i gos >/dev/null); then
 			FAMILY=GOSUN
+		elif (echo ${F} | grep -i tw >/dev/null); then
+			FAMILY=THINKWILL
+		elif (echo ${F} | grep -i yug >/dev/null); then
+			FAMILY=YUGE
 		elif (echo ${F} | grep -i zte >/dev/null); then
 			FAMILY=ZTE
 		else

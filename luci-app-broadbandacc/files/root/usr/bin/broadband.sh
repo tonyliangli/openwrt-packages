@@ -111,7 +111,8 @@ get_bind_ip() {
 # 定义基本 HTTP 命令和参数
 gen_http_cmd() {
 	_http_cmd="https://tisu-api-v3.speedtest.cn/speedUp/query"
-	_http_cmd1="https://api-v3.speedtest.cn/ip"
+	#_http_cmd1="https://api-v3.speedtest.cn/ip" ip查询作废
+ 	_http_cmd1="https://qifu-api.baidubce.com/ip/local/geo/v1/district"
 	_http_cmd2="https://tisu-api.speedtest.cn/api/v2/speedup/reopen"
 	return 1
 }
@@ -156,9 +157,9 @@ isp_bandwidth() {
 	local _ip
 	json_get_var _ip "ip"
 	_log "出口IP地址: $_ip" $(( 1 | 1 * 4 ))
-	local _dialAcct
-	json_get_var _dialAcct "dialAcct"
-	_log "宽带: $_dialAcct" $(( 1 | 1 * 4 ))
+	#local _dialAcct
+	#json_get_var _dialAcct "dialAcct"
+	#_log "宽带: $_dialAcct" $(( 1 | 1 * 4 ))
 	local _updatedAt
 	json_get_var _updatedAt "updatedAt"
 	_log "提速开始时间: $_updatedAt" $(( 1 | 1 * 4 ))
@@ -166,17 +167,17 @@ isp_bandwidth() {
 	json_get_var _targetUpH "targetUpH"			
 	local _upHExpire
 	json_get_var _upHExpire "upHExpire"
-	_log "一类上行带宽$(($_targetUpH / 1024))M提速截至时间: $_upHExpire" $(( 1 | 1 * 4 ))
+	_log "一类上行带宽$(expr $_targetUpH / 1024)M提速截至时间: $_upHExpire" $(( 1 | 1 * 4 ))
 	local _targetUp100
 	json_get_var _targetUp100 "targetUp100"			
 	local _up100Expire
 	json_get_var _up100Expire "up100Expire"
-	_log "二类上行带宽$(($_targetUp100 / 1024))M提速截至时间: $_up100Expire" $(( 1 | 1 * 4 ))
-	local _targetDown
-	json_get_var _targetDown "targetDown"	
+	_log "二类上行带宽$(expr $_targetUp100 / 1024)M提速截至时间: $_up100Expire" $(( 1 | 1 * 4 ))
+	local _download
+	json_get_var _download "download"
 	local _downExpire
 	json_get_var _downExpire "downExpire"
-	_log "下行带宽$(($_targetDown / 1024))M提速截至时间: $_downExpire" $(( 1 | 1 * 4 ))
+	_log "下行带宽${_download}M提速截至时间: $_downExpire" $(( 1 | 1 * 4 ))
 	#50
 	local _upHExpireT
 	json_get_var _upHExpireT "upHExpireT"
@@ -190,11 +191,11 @@ isp_bandwidth() {
 	local cur_sec=`date '+%s'`
  	if [ $_up100ExpireT != "false" -a $_up100ExpireT -gt $cur_sec ]; then
 		#二类上行提速
-		local outmsg="二类上行提速成功，带宽已提升至 $(($_targetUp100 / 1024))M"; _log "$outmsg" $(( 1 | 2 * 8 ))
+		local outmsg="二类上行提速成功，带宽已提升至 $(expr $_targetUp100 / 1024)M"; _log "$outmsg" $(( 1 | 2 * 8 ))
 		[ $1 -eq 1 ] && down_acc=2 || up_acc=2
 	elif [ $_upHExpireT != "false" -a $_upHExpireT -gt $cur_sec ]; then
 		#一类上行提速
-		local outmsg="一类上行提速成功，带宽已提升至 $(($_targetUpH / 1024))M"; _log "$outmsg" $(( 1 | 2 * 8 ))
+		local outmsg="一类上行提速成功，带宽已提升至 $(expr $_targetUpH / 1024)M"; _log "$outmsg" $(( 1 | 2 * 8 ))
 		[ $1 -eq 1 ] && down_acc=2 || up_acc=2
 	else
 		local outmsg="上行未开通"; _log "$outmsg" $(( 1 | 2 * 8 | 32 ))
@@ -202,7 +203,7 @@ isp_bandwidth() {
 	fi
  	if [ $_downExpireT != "false" -a $_downExpireT -gt $cur_sec ]; then
 		#下行提速
-		local outmsg="下行提速成功，带宽已提升至 $(($_targetDown / 1024))M"; _log "$outmsg" $(( 1 | 1 * 8 ))
+		local outmsg="下行提速成功，带宽已提升至 ${_download}M"; _log "$outmsg" $(( 1 | 1 * 8 ))
 		[ $1 -eq 1 ] && down_acc=2 || up_acc=2
 	else
 		local outmsg="下行未开通"; _log "$outmsg" $(( 1 | 1 * 8 | 32 ))
@@ -230,7 +231,7 @@ _keepalive() {
   # 接口名称
   network=$(uci -q get "broadband.general.network")
    # 获取出口ip
-  _publicnet_ip=$(wget -qO- $_http_cmd1 | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -1)
+  _publicnet_ip=$(wget -q -O - $_http_cmd1 | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | head -1)
    # 断网睡眠
   if [ -z "$_publicnet_ip" ]; then
     _log "网络断开！请检查接口是否断开"

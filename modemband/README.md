@@ -1,4 +1,4 @@
-Setting LTE bands for selected modems.
+Setting LTE/5G NSA/5G SA bands for selected modems.
 
 Supported devices:
 - BroadMobi BM806U
@@ -14,10 +14,13 @@ Supported devices:
 - Quectel EC20
 - Quectel EC25
 - Quectel EG06-E
+- Quectel EG18-EA
 - Quectel EM12-G
 - Quectel EM160R-GL
 - Quectel EP06-E
 - Quectel RG502Q-EA
+- Quectel RM500Q-GL
+- Quectel RM502Q-AE
 - Quectel RM520N-GL
 - Telit LM940
 - Telit LN940 (Foxconn T77W676)
@@ -34,13 +37,29 @@ Supported devices:
 root@MiFi:~# modemband.sh help
 Available commands:
  /usr/bin/modemband.sh getinfo
+ /usr/bin/modemband.sh json
+ /usr/bin/modemband.sh help
+
+for LTE modem
  /usr/bin/modemband.sh getsupportedbands
  /usr/bin/modemband.sh getsupportedbandsext
  /usr/bin/modemband.sh getbands
  /usr/bin/modemband.sh getbandsext
  /usr/bin/modemband.sh setbands "<band list>"
- /usr/bin/modemband.sh json
- /usr/bin/modemband.sh help
+
+for 5G NSA modem
+ /usr/bin/modemband.sh getsupportedbands5gnsa
+ /usr/bin/modemband.sh getsupportedbandsext5gnsa
+ /usr/bin/modemband.sh getbands5gnsa
+ /usr/bin/modemband.sh getbandsext5gnsa
+ /usr/bin/modemband.sh setbands5gnsa "<band list>"
+
+for 5G SA modem
+ /usr/bin/modemband.sh getsupportedbands5gsa
+ /usr/bin/modemband.sh getsupportedbandsext5gsa
+ /usr/bin/modemband.sh getbands5gsa
+ /usr/bin/modemband.sh getbandsext5gsa
+ /usr/bin/modemband.sh setbands5gsa "<band list>"
 
 root@MiFi:~# # modemband.sh
 Modem: Quectel EC25
