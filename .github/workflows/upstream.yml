@@ -230,6 +230,7 @@ jobs:
         svn export https://github.com/openwrt/luci/branches/openwrt-22.03/applications/luci-app-wireguard
         svn export https://github.com/lucikap/Brukamen/trunk/luci-app-ua2f
         svn export https://github.com/HiGarfield/lede-17.01.4-Mod-a/trunk/package/extra/luci-app-openvpn-server
+        svn copy https://github.com/kiddin9/openwrt-packages/trunk/luci-app-softethervpn5@7660 .
         ) &
         (
         git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" lua-maxminddb luci-app-bypass
