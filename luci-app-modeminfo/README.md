@@ -9,6 +9,8 @@ Supported devices:
  - Quectel EC200T/EC21/EC25/EP06/EM12/EM160R-GL
 
  - SimCom SIM7600E-H/SIM7906
+   
+ - STYX MG8224
 
  - Huawei E3372 (LTE)/ME909
 
@@ -17,12 +19,18 @@ Supported devices:
  - HP LT4220
 
  - Dell DW5821e
+
+ - MEIGLink SLM750-R2/SLM820/SLM828
  
- - MikroTik R11e-LTE/R11e-LTE6 (temporary dropped)
+ - MikroTik R11e-LTE/R11e-LTE6
 
  - Fibocom NL668/NL678/L850/L860
 
  - Gosuncnwelink GM510
+
+ - ThinkWill ML7820+
+
+ - Yuge CLM920
 
  - ZTE MF823/MF823D
 
@@ -42,8 +50,11 @@ Supported devices:
 |modeminfo-serial-dell |Dell DW5821e modem support |
 |modeminfo-serial-fibocom |Fibocom LN668/NL678 modems support |
 |modeminfo-serial-xmm |Fibocom L850/L860 modems support |
+|modeminfo-serial-mikrotik |MikroTik R11e-LTE/R11e-LTE6 modems support |
 |modeminfo-serial-gosun |Gosuncnwelink GM510 support |
-|modeminfo-serial-gosun |ZTE MF823/MF823D support |
+|modeminfo-serial-tw |ThinkWill ML7820+ support |
+|modeminfo-serial-yuge |Yuge CLM920 support |
+|modeminfo-serial-zte |ZTE MF823/MF823D support |
 </details>
 
 <details>

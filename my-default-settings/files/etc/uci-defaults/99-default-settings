@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sed -i "s/op.supes.top/dl.openwrt.ai/" /etc/opkg/distfeeds.conf
+
 ([ -x /bin/bash ] && ! grep -q "^root.*bash" /etc/passwd) && sed -i "s/^\(root.*\/\)ash/\1bash/g" /etc/passwd
 
 # [[ "$(df | grep overlay)" && ! "$(df | grep /rom/overlay)" ]] && firstboot
@@ -36,7 +38,7 @@ sed -i "/^threads =/c\threads = $processor" /etc/uwsgi/vassals/luci-webui.ini
 fi
 
 if [ -f /etc/config/attendedsysupgrade ]; then
-uci -q set attendedsysupgrade.server.url='https://supes.top'
+uci -q set attendedsysupgrade.server.url='https://openwrt.ai'
 uci commit attendedsysupgrade
 fi
 
@@ -51,6 +53,9 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 	if uci -q get system.@system[0] >/dev/null; then
 		uci -q set system.@system[0].zonename='Asia/Shanghai'
 		uci -q set system.@system[0].timezone='CST-8'
+		uci -q set system.@system[0].conloglevel='4'
+		uci -q set system.@system[0].cronloglevel='8'
+		uci -q set system.@system[0].ttylogin='1'
 		uci -q del system.ntp.server
 		uci -q add_list system.ntp.server='ntp.aliyun.com'
 		uci -q add_list system.ntp.server='0.openwrt.pool.ntp.org'
@@ -76,7 +81,6 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 	fi
 
 	sed -i '/option disabled/d' /etc/config/wireless
-	sed -i '/set wireless.radio${devidx}.disabled/d' /lib/wifi/mac80211.sh
 
 	wifi_setup_radio(){
 	local radio=$1
@@ -90,7 +94,7 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 		if [ "$(uci -q get wireless.${radio}.band)" = "5g" ]; then
 			uci -q set wireless.default_${radio}.ssid="${SSID}_5G"
 			if [[ "${htmode}" == HE* ]]; then   # AX
-				if [[ "$(board_name)" == *cr660x || "$(board_name)" == *ax9000 || "$DISTRIB_TARGET" == 'ipq60xx/generic' || "$DISTRIB_TARGET" == 'ipq807x/ipq60xx' ]]; then
+				if [[ "$(board_name)" == *cr660x || "$(board_name)" == *ax9000 || "$DISTRIB_TARGET" == *ipq60xx ]]; then
 					uci -q set wireless.${radio}.htmode="HE80"
 					uci -q set wireless.${radio}.channel='157'
 				else
@@ -118,14 +122,10 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 			else
 				uci -q set wireless.default_${radio}.encryption='none'
 			fi
-			if uci get wireless.${radio}.path | grep -q bcma || iwinfo wlan${radio:5} info | grep -qi Cypress; then
-				WLAN_IDX=${radio:5}
-				uci set wireless.default_${radio}.ifname="wlan${WLAN_IDX}"
-			fi
 		fi
 	}
 
-	if [ -f /etc/config/wireless ]; then
+	if [[ -f /etc/config/wireless ]]; then
 		SSID=${hostname}
 		SSID_PASSWD=""
 		[ "$(uci -q get wireless.radio1.band)" == "5g" ] && uci -q set wireless.radio0.band="2g"
@@ -152,7 +152,8 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 	uci -q set fstab.@global[0].anon_mount=1
 	uci commit fstab
  
-	uci -q set network.@globals[0].packet_steering=1
+	uci -q set network.globals.packet_steering=1
+	uci -q set network.@device[0].promisc=1
 	uci commit network
   
 	uci -q set dhcp.@dnsmasq[0].dns_redirect='1'
@@ -170,9 +171,7 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 	uci -q set nft-qos.default.limit_enable='0'
 	uci commit nft-qos
 
-	uci -q set system.@system[0].conloglevel='4'
-	uci -q set system.@system[0].cronloglevel='8'
-	uci commit system
+	
 fi
 
 # kB
@@ -227,14 +226,7 @@ if [[ ! "$version" || "$version" -lt 1 ]]; then
 	mkdir -p /etc/sysctl.d
 	echo -n >$SYSCTL_LOCAL
 	echo net.nf_conntrack_max=$nf_conntrack_max >>$SYSCTL_LOCAL
-	echo net.ipv4.ip_early_demux=0 >>$SYSCTL_LOCAL
-	echo net.bridge.bridge-nf-call-iptables=0 >>$SYSCTL_LOCAL
-	echo net.ipv4.fib_multipath_hash_policy=1 >>$SYSCTL_LOCAL
-	echo net.ipv4.tcp_congestion_control=cubic >>$SYSCTL_LOCAL
-	echo net.netfilter.nf_conntrack_helper=1 >>$SYSCTL_LOCAL
-	echo kernel.msgmax = 65536 >>$SYSCTL_LOCAL
-	echo kernel.msgmnb = 65536 >>$SYSCTL_LOCAL
-	echo vm.swappiness=0 >>$SYSCTL_LOCAL
+	echo net.core.rmem_max=$nf_conntrack_max >>$SYSCTL_LOCAL
 	version=1
 fi
 

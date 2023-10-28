@@ -265,22 +265,15 @@ return view.extend({
 
 		if(!json.hasOwnProperty('error')){
 
-		if (json.enabled == '' || json.modem == '') {
-			fs.exec('sleep 2');
-				if (json.enabled == '' || json.modem == '') {
-						L.ui.showModal(_('Modemband'), [
-						E('p', { 'class': 'spinning' }, _('Waiting to read data from the modem...'))
-						]);
+		if (json.enabled == '' || json.modem == '' || json.modem === undefined || json.enabled === undefined) {
 
-						window.setTimeout(function() {
-						location.reload();
-						//L.hideModal();
-						}, 25000).finally();
-					}
-				}
-					else {
-					L.hideModal();
-					}
+			ui.addNotification(null, E('p', _('LTE bands cannot be read. Check if your modem supports this technology and if it is in the list of supported modems.')), 'info');
+			modemen = '-';
+			modem = '-';
+			sbands = '-';
+
+		}
+		else {
 
 		var modem = json.modem;
 		for (var i = 0; i < json.enabled.length; i++) 
@@ -327,7 +320,8 @@ return view.extend({
 
 			});
 		});
-		}		
+		}
+}		
 		else {
 			if (json.error.includes('No supported') == true) {
 			modemen = '-';
@@ -347,7 +341,7 @@ return view.extend({
 
 		var info = _('Configuration modem frequency bands. More information about the modemband application on the %seko.one.pl forum%s.').format('<a href="https://eko.one.pl/?p=openwrt-modemband" target="_blank">', '</a>');
 
-		m = new form.JSONMap(this.formdata, _('Configure modem bands'), info);
+		m = new form.JSONMap(this.formdata, _('LTE Bands Configuration'), info);
 
 		s = m.section(form.TypedSection, 'modemband', '', _(''));
 		s.anonymous = true;
@@ -362,7 +356,7 @@ return view.extend({
 					]),
 
 						E('tr', { 'class': 'tr' }, [
-						E('td', { 'class': 'td left', 'width': '33%' }, [ _('LTE bands')]),
+						E('td', { 'class': 'td left', 'width': '33%' }, [ _('Currently set LTE bands')]),
 						E('td', { 'class': 'td left', 'id': 'modemlteb' }, [ modemen || '-' ]),
 					]),
 
@@ -378,7 +372,13 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
-		if(!("error" in json)) {
+		if (json.enabled == '' || json.modem == '' || json.modem === undefined || json.enabled === undefined) {
+
+			modemen = '-';
+			modem = '-';
+			sbands = '-';
+		}
+		else {
 		s.tab('bandset', _('Preferred bands settings'));
  
 		o = s.taboption('bandset', cbiRichListValue, 'set_bands',
@@ -492,3 +492,4 @@ return view.extend({
 		]);
 	}
 });
+

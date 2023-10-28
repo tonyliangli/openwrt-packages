@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=modeminfo
-PKG_VERSION:=0.3.3
-PKG_RELEASE:=25
+PKG_VERSION:=0.3.8
+PKG_RELEASE:=37
 PKG_MAINTAINER:=Konstantine Shevlakov <shevlakov@132lan.ru>
 
 include $(INCLUDE_DIR)/package.mk
@@ -58,11 +58,32 @@ define Package/$(PKG_NAME)-serial-xmm
   TITLE:= FIBOCOM L850/L860 Intel XMM chips serial addon for modeminfo
 endef
 
+define Package/$(PKG_NAME)-serial-mikrotik
+  PKGARCH:=all
+  SUBMENU:=Telephony
+  DEPENDS:=+modeminfo +kmod-usb-acm +atinout
+  TITLE:= MikroTik R11e-LTE/R11e-LTE6 serial addon for modeminfo
+endef
+
 define Package/$(PKG_NAME)-serial-sierra
   PKGARCH:=all
   SUBMENU:=Telephony
   DEPENDS:=+modeminfo +kmod-usb-serial-qualcomm +atinout
   TITLE:= Sierra Wireless EM7455 serial addon for modeminfo
+endef
+
+define Package/$(PKG_NAME)-serial-styx
+  PKGARCH:=all
+  SUBMENU:=Telephony
+  DEPENDS:=+modeminfo +kmod-usb-serial-option +atinout
+  TITLE:= STYX MG8224 serial addon for modeminfo
+endef
+
+define Package/$(PKG_NAME)-serial-meig
+  PKGARCH:=all
+  SUBMENU:=Telephony
+  DEPENDS:=+modeminfo +kmod-usb-serial-option +atinout
+  TITLE:= MEIGLink SLM750-R2, SLM820, SLM828 serial addom for modeminfo
 endef
 
 define Package/$(PKG_NAME)-serial-dell
@@ -77,6 +98,20 @@ define Package/$(PKG_NAME)-serial-gosun
   SUBMENU:=Telephony
   DEPENDS:=+modeminfo +kmod-usb-serial-option +atinout
   TITLE:= Gosuncnwelink GM510 serial addon for modeminfo
+endef
+
+define Package/$(PKG_NAME)-serial-tw
+  PKGARCH:=all
+  SUBMENU:=Telephony
+  DEPENDS:=+modeminfo +kmod-usb-serial-option +atinout
+  TITLE:= ThinkWill ML7820+ serial addon for modeminfo
+endef
+
+define Package/$(PKG_NAME)-serial-yuge
+  PKGARCH:=all
+  SUBMENU:=Telephony
+  DEPENDS:=+modeminfo +kmod-usb-serial-option +atinout
+  TITLE:= Yuge CLM920 serial addon for modeminfo
 endef
 
 define Package/$(PKG_NAME)-serial-zte
@@ -165,9 +200,24 @@ define Package/$(PKG_NAME)-serial-xmm/install
 	$(CP) ./root/usr/share/modeminfo/scripts/INTEL* $(1)/usr/share/modeminfo/scripts
 endef
 
+define Package/$(PKG_NAME)-serial-mikrotik/install
+	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
+	$(CP) ./root/usr/share/modeminfo/scripts/MIKROTIK* $(1)/usr/share/modeminfo/scripts
+endef
+
 define Package/$(PKG_NAME)-serial-sierra/install
 	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
 	$(CP) ./root/usr/share/modeminfo/scripts/SIERRA* $(1)/usr/share/modeminfo/scripts
+endef
+
+define Package/$(PKG_NAME)-serial-styx/install
+	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
+	$(CP) ./root/usr/share/modeminfo/scripts/STYX* $(1)/usr/share/modeminfo/scripts
+endef
+
+define Package/$(PKG_NAME)-serial-meig/install
+	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
+	$(CP) ./root/usr/share/modeminfo/scripts/MEIGLINK* $(1)/usr/share/modeminfo/scripts
 endef
 
 define Package/$(PKG_NAME)-serial-dell/install
@@ -178,6 +228,16 @@ endef
 define Package/$(PKG_NAME)-serial-gosun/install
 	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
 	$(CP) ./root/usr/share/modeminfo/scripts/GOSUN* $(1)/usr/share/modeminfo/scripts
+endef
+
+define Package/$(PKG_NAME)-serial-tw/install
+	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
+	$(CP) ./root/usr/share/modeminfo/scripts/THINKWILL* $(1)/usr/share/modeminfo/scripts
+endef
+
+define Package/$(PKG_NAME)-serial-yuge/install
+	$(INSTALL_DIR) $(1)/usr/share/modeminfo/scripts
+	$(CP) ./root/usr/share/modeminfo/scripts/YUGE* $(1)/usr/share/modeminfo/scripts
 endef
 
 define Package/$(PKG_NAME)-serial-zte/install
@@ -202,9 +262,14 @@ $(eval $(call BuildPackage,$(PKG_NAME)-serial-quectel))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-fibocom))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-telit))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-xmm))
+$(eval $(call BuildPackage,$(PKG_NAME)-serial-mikrotik))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-sierra))
+$(eval $(call BuildPackage,$(PKG_NAME)-serial-styx))
+$(eval $(call BuildPackage,$(PKG_NAME)-serial-meig))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-dell))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-gosun))
+$(eval $(call BuildPackage,$(PKG_NAME)-serial-tw))
+$(eval $(call BuildPackage,$(PKG_NAME)-serial-yuge))
 $(eval $(call BuildPackage,$(PKG_NAME)-serial-zte))
 $(eval $(call BuildPackage,$(PKG_NAME)-qmi))
 $(eval $(call BuildPackage,$(PKG_NAME)-telegram))
