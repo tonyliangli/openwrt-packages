@@ -115,7 +115,7 @@ jobs:
         (
         git_clone https://github.com/jerrykuku/luci-theme-argon
         git_clone https://github.com/jerrykuku/luci-app-argon-config
-        git_clone https://github.com/jerrykuku/luci-app-vssr
+        #git_clone https://github.com/jerrykuku/luci-app-vssr
         git_clone https://github.com/jerrykuku/luci-app-ttnode
         git_clone https://github.com/sirpdboy/luci-app-advanced
         git_clone https://github.com/sirpdboy/luci-app-autotimeset
