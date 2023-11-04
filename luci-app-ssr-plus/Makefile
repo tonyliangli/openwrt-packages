@@ -42,6 +42,7 @@ LUCI_DEPENDS:= \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_MosDNS:mosdns \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_MosDNS:yq \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_MosDNS:v2dat \
+	+PACKAGE_$(PKG_NAME)_INCLUDE_MosDNS:diffutils \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Hysteria:hysteria \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Tuic_Client:tuic-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadow_TLS:shadow-tls \
