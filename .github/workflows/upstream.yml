@@ -105,7 +105,7 @@ jobs:
         (
         git_clone https://github.com/pexcn/openwrt-chinadns-ng chinadns-ng
         git_clone https://github.com/xiaorouji/openwrt-passwall && mvdir openwrt-passwall
-        git clone https://github.com/fw876/helloworld -b main && rm -rf helloworld/v2raya && mvdir helloworld
+        git clone https://github.com/fw876/helloworld -b main && mvdir helloworld && rm -rf v2raya
         git_clone https://github.com/Lienol/openwrt-package liep
         git clone https://github.com/AutoCONFIG/minieap-openwrt -b default
         git_clone https://github.com/rufengsuixing/luci-app-autoipsetadder
@@ -156,7 +156,8 @@ jobs:
         git_clone https://github.com/ophub/luci-app-amlogic amlogic && mv -n amlogic/luci-app-amlogic ./;rm -rf amlogic
         git_clone https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest cloudflarespeedtest && mv -n cloudflarespeedtest/applications/* ./;rm -rf cloudflarespeedtest
         git_clone https://github.com/xiaorouji/openwrt-passwall2 passwall2 && mv -n passwall2/luci-app-passwall2 ./;rm -rf passwall2
-        git_clone https://github.com/xiaorouji/openwrt-passwall-packages && mvdir openwrt-passwall-packages
+        git_clone https://github.com/xiaorouji/openwrt-passwall-packages && mvdir openwrt-passwall-packages && rm -rf naiveproxy
+
         # git_clone https://github.com/messense/aliyundrive-fuse aliyundrive && mv -n aliyundrive/openwrt/* ./;rm -rf aliyundrive
         git_clone https://github.com/linkease/nas-packages && mv -n nas-packages/{network/services/*,multimedia/*} ./; rm -rf nas-packages
         git_clone https://github.com/linkease/nas-packages-luci && mv -n nas-packages-luci/luci/* ./; rm -rf nas-packages-luci
