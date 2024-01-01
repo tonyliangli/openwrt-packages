@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-broadbandacc
-PKG_VERSION:=3.4
-PKG_RELEASE:=12
+PKG_VERSION:=3.6
+PKG_RELEASE:=14
 
 PKG_MAINTAINER:=Diciya <484154383@qq.com>
 PKG_LICENSE:=GPLv3

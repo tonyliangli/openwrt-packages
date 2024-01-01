@@ -954,7 +954,7 @@ return view.extend({
 					o.value('2', _('High'));
 					o.value('3', _('Very High'));
 
-					o = ss.taboption('advanced', form.Value, 'distance', _('Distance Optimization'), _('Distance to farthest network member in meters.'));
+					o = ss.taboption('advanced', form.Value, 'distance', _('Distance Optimization'), _('Distance to farthest network member in meters. Set only for distances above one kilometer; otherwise it is harmful.'));
 					o.datatype = 'or(range(0,114750),"auto")';
 					o.placeholder = 'auto';
 
@@ -1525,7 +1525,6 @@ return view.extend({
 				o.rmempty = true;
 				o.multiple = false;
 				o.noaliases = true;
-				o.nobridges = true;
 				o.nocreate = true;
 				o.noinactive = true;
 
