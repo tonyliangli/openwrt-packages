@@ -1,5 +1,7 @@
-[issues]: https://github.com/jerrykuku/luci-app-argon-config/issues/new
+[issues]: https://github.com/derisamedia/luci-theme-alpha/issues
 [issues-badge]: https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat-square
+[release]: https://github.com/derisamedia/luci-theme-alpha/releases
+[release-badge]: https://img.shields.io/badge/check-releases-blue
 
 
 
@@ -12,6 +14,8 @@
 
 [![issues][issues-badge]][issues]
 
+[![release][release-badge]][release]
+
 
 
 Luci theme for Official Openwrt and Alpha OS build ,based on bootstrap and material luCi theme refferences,
@@ -21,6 +25,14 @@ Luci theme for Official Openwrt and Alpha OS build ,based on bootstrap and mater
 ![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss1.png)
   
 ![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss2.png)
+
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss3.png)
+
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview1.png)
+
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview2.png)
+
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview3.png)
 
 </p>
 
