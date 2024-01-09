@@ -1,5 +1,5 @@
---- a/package/extra/luci-app-openvpn-server/root/etc/uci-defaults/luci-openvpn
-+++ b/package/extra/luci-app-openvpn-server/root/etc/uci-defaults/luci-openvpn
+--- a/luci-app-openvpn-server/root/etc/uci-defaults/luci-openvpn
++++ b/luci-app-openvpn-server/root/etc/uci-defaults/luci-openvpn
 @@ -1,5 +1,10 @@
  #!/bin/sh
  
