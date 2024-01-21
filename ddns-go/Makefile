@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ddns-go
-KG_VERSION:=5.7.0
-PKG_RELEASE:=33
+PKG_VERSION:=5.7.1
+PKG_RELEASE:=42
 
-PKG_SOURCE_PROTO:=git
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/jeessy2/ddns-go.git
-PKG_MIRROR_HASH:=skip
-PKG_SOURCE_VERSION:=f475144f0f9855a0bbed56bed8cfe8a47cd9a455
+PKG_SOURCE_URL:=https://codeload.github.com/jeessy2/ddns-go/tar.gz/v$(PKG_VERSION)?
+PKG_HASH:=skip
 
 PKG_LICENSE:=AGPL-3.0-only
 PKG_LICENSE_FILES:=LICENSE
@@ -23,7 +21,6 @@ PKG_MAINTAINER:=herboy2008 <herboy2008@gmail.com>
 
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
-PKG_USE_MIPS16:=0
 PKG_BUILD_FLAGS:=no-mips16
 
 GO_PKG:=github.com/jeessy2/ddns-go/v5
@@ -47,15 +44,14 @@ define Package/ddns-go/description
   support Alidns Dnspod Cloudflare Hicloud Callback Baiducloud porkbun GoDaddy Google Domains.
 endef
 
-
 define Package/ddns-go/install
 	$(call GoPackage/Package/Install/Bin,$(1))
 
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./file/ddns-go.init $(1)/etc/init.d/ddns-go
+	$(INSTALL_BIN) $(CURDIR)/file/ddns-go.init $(1)/etc/init.d/ddns-go
 
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_BIN) ./file/luci-ddns-go.uci-default $(1)/etc/uci-defaults/luci-ddns-go
+	$(INSTALL_BIN) $(CURDIR)/file/luci-ddns-go.uci-default $(1)/etc/uci-defaults/luci-ddns-go
 endef
 
 $(eval $(call GoBinPackage,ddns-go))

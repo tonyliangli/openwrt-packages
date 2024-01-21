@@ -221,6 +221,7 @@ jobs:
         git_clone https://github.com/gSpotx2f/luci-app-internet-detector
         git_clone https://github.com/vinewx/NanoHatOLED; mv NanoHatOLED/nanohatoled ./;rm -rf NanoHatOLED
         git_clone https://github.com/zerolabnet/luci-app-torbp
+        git_clone https://github.com/muink/luci-app-tinyfilemanager
         git_clone https://github.com/sbwml/luci-app-airconnect airconnect1 && mv airconnect1/* ./ && rm -rf airconnect1
         ) &
         (
@@ -229,11 +230,8 @@ jobs:
         #svn export https://github.com/xiaoxifu64/immortalwrt/trunk/package/rooter/ext-rooter-basic
         svn export https://github.com/openwrt/luci/branches/openwrt-22.03/applications/luci-app-wireguard
         svn export https://github.com/lucikap/Brukamen/trunk/luci-app-ua2f
-        svn export https://github.com/HiGarfield/lede-17.01.4-Mod-a/trunk/package/extra/luci-app-openvpn-server
+        svn export https://github.com/HiGarfield/lede-17.01.4-Mod/trunk/package/extra/luci-app-openvpn-server
         svn export https://github.com/tonyliangli/openwrt-packages/branches/softethervpn5/luci-app-softethervpn5
-        ) &
-        (
-        git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" lua-maxminddb luci-app-bypass
         ) &
         (
         git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" net/miniupnpd net/mwan3 multimedia/UnblockNeteaseMusic-Go \
@@ -334,7 +332,7 @@ jobs:
              -H "Authorization: Bearer ${{ secrets.TOKEN_KIDDIN9 }}" \
              -X POST -d '{ "query": "query {repository(owner: \"'"$1"'\", name: \"'"$2"'\"){latestRelease{tagName tagCommit{oid}}refs(refPrefix:\"refs/tags/\",last:1,orderBy:{field:TAG_COMMIT_DATE,direction:ASC}){edges{node{name target{oid}}}}defaultBranchRef{target{...on Commit {oid}}}}}"}' https://api.github.com/graphql)
         }
-        for pkg in $(ls !(luci-*|cloudflared|joker|aria2|frp|libtorrent-rasterbar|ua2f|homebox|xtables-wgobfs|nexttrace|tuic-server|subconverter|softethervpn5|shadowsocksr-libev|mt76|sub-web|mmdvm-host|alist|curl|qBittorrent-Enhanced-Edition|libwxwidgets|ysf-clients|natter|fullconenat|v2raya|r8152|amule|brook|3proxy|containerd|oscam|netmaker|n2n_v2|naiveproxy|miniupnpd-nft|upx|netdata|tailscale|mosdns|r8168|coremark|mbedtls|rtl8821cu|rtl8188eu|rtl8812au-ac|rtl88x2bu|rtl8189es|quickjspp|accel-ppp)/Makefile); do
+        for pkg in $(ls !(luci-*|cloudflared|joker|aria2|frp|ddns-go|libtorrent-rasterbar|ua2f|homebox|xtables-wgobfs|nexttrace|tuic-server|subconverter|softethervpn5|shadowsocksr-libev|mt76|sub-web|mmdvm-host|alist|curl|qBittorrent-Enhanced-Edition|libwxwidgets|ysf-clients|natter|fullconenat|v2raya|r8152|amule|brook|3proxy|containerd|oscam|netmaker|n2n_v2|naiveproxy|miniupnpd-nft|upx|netdata|tailscale|mosdns|r8168|coremark|mbedtls|rtl8821cu|rtl8188eu|rtl8812au-ac|rtl88x2bu|rtl8189es|quickjspp|accel-ppp)/Makefile); do
           repo="$(grep PKG_SOURCE_URL $pkg | grep github | cut -f 4-5 -d '/' | sed -e 's/.git//' | grep -E '[0-9a-zA-Z_-]+$')" || true
           if [ "$repo" ]; then
             owner="$(echo $repo | cut -f 1 -d '/')"
