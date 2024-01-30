@@ -1,5 +1,5 @@
---- a/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js
-+++ b/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js
+--- a/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js
++++ b/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js
 @@ -337,6 +337,41 @@ return view.extend({
  		s.tab('mxhosts', _('MX'));
  		s.tab('cnamehosts', _('CNAME'));
