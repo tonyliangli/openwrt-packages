@@ -1,3 +1,17 @@
+--- a/transmission/files/transmission.init
++++ b/transmission/files/transmission.init
+@@ -181,10 +181,6 @@ start_service() {
+ 	config_foreach transmission 'transmission'
+ }
+ 
+-reload_service() {
+-	procd_send_signal "$PROG"
+-}
+-
+ transmission_mount_triggers() {
+ 	local cfg="$1"
+ 
+
 --- a/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js
 +++ b/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js
 @@ -34,7 +34,7 @@ return view.extend({
