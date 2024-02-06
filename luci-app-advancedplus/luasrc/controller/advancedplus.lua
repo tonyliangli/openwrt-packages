@@ -12,7 +12,7 @@ function index()
 	page = entry({"admin","system","advancedplus"},alias("admin","system","advancedplus","advancededit"),_("Advanced plus"),61)
 	page.dependent = true
 	page.acl_depends = { "luci-app-advancedplus" }
-	if luci.sys.call("grep \"mediaurlbase '/luci-static/kucat'\" /etc/config/luci >/dev/null") == 0 then
+	if uci.cursor():get("luci", "main", "mediaurlbase") == "/luci-static/kucat" then
 	entry({"admin","system","advancedplus","kucatset"},cbi("advancedplus/kucatset"),_("KuCat Theme Config"),20).leaf = true
 	entry({"admin", "system","advancedplus","kucatupload"}, form("advancedplus/kucatupload"), _("Desktop background upload"), 80).leaf = true
 	end
