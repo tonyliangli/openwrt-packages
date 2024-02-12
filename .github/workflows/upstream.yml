@@ -226,6 +226,8 @@ jobs:
         ) &
         (
         git clone https://github.com/sirpdboy/luci-theme-kucat -b js --depth 1
+        git_clone https://github.com/blueberry-pie-11/luci-app-natmap
+        git_clone https://github.com/QiuSimons/luci-app-daed-next daed && mvdir daed
         ) &
         (
         svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
