@@ -228,6 +228,7 @@ jobs:
         git clone https://github.com/sirpdboy/luci-theme-kucat -b js --depth 1
         git_clone https://github.com/blueberry-pie-11/luci-app-natmap
         git_clone https://github.com/QiuSimons/luci-app-daed-next daed1 && mvdir daed1
+        git_clone https://github.com/yangchlin/oscam-openwrt
         ) &
         (
         svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
@@ -262,7 +263,7 @@ jobs:
         git_sparse_clone openwrt-23.05 "https://github.com/immortalwrt/packages" "immpkgs" net/mwol net/n2n net/dae \
         net/sub-web net/dnsproxy net/haproxy net/v2raya net/cdnspeedtest net/keepalived net/microsocks \
         net/go-nats net/go-wol net/simple-torrent net/bitsrunlogin-go net/transfer net/cloudreve net/daed \
-        net/subconverter net/ngrokc net/oscam net/njitclient net/scutclient net/gost net/ua2f net/gowebdav net/qBittorrent-Enhanced-Edition \
+        net/subconverter net/ngrokc net/njitclient net/scutclient net/gost net/ua2f net/gowebdav net/qBittorrent-Enhanced-Edition \
         net/tinyportmapper net/tinyfecvpn net/nexttrace net/pcap-dnsproxy net/rustdesk-server net/tuic-server net/speedtest-go \
         net/dns-forwarder net/ipset-lists net/ShadowVPN net/adguardhome net/cloudflared net/nps net/naiveproxy \
         admin/btop libs/jpcre2 libs/wxbase libs/rapidjson libs/libcron libs/quickjspp libs/toml11 libs/libtorrent-rasterbar \
