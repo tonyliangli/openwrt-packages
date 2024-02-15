@@ -342,6 +342,21 @@ return view.extend({
 		o = s.taboption('custom_domain', form.SectionValue, 'domain', form.GridSection, 'domain', null,
 			_('Define a custom domain name and the corresponding PTR record'));
 
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+
+		so = ss.option(form.Value, 'name', _('Domain Name'));
+		so.datatype = 'hostname';
+		so.rmempty  = true;
+
+		so = ss.option(form.Value, 'ip', _('<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address'));
+		so.datatype = 'or(ip4addr,"ignore")';
+		so.rmempty  = true;
+
+		so = ss.option(form.Value, 'comments', _('Comments'));
+		so.rmempty  = true;
+
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
 			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
