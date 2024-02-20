@@ -8,7 +8,7 @@
  PKG_INSTALL:=1
  PKG_BUILD_PARALLEL:=1
  PKG_BUILD_FLAGS:=lto
-@@ -66,12 +67,11 @@ $(call Package/dnsmasq/Default)
+@@ -66,8 +67,7 @@ $(call Package/dnsmasq/Default)
    TITLE += (with DNSSEC, DHCPv6, Auth DNS, IPset, Nftset, Conntrack, NO_ID enabled by default)
    DEPENDS+=+PACKAGE_dnsmasq_full_dnssec:libnettle \
  	+PACKAGE_dnsmasq_full_ipset:kmod-ipt-ipset \
