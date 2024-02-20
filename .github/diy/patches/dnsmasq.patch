@@ -1,6 +1,6 @@
 --- a/dnsmasq/Makefile
 +++ b/dnsmasq/Makefile
-@@ -66,8 +66,7 @@ $(call Package/dnsmasq/Default)
+@@ -66,12 +66,15 @@ $(call Package/dnsmasq/Default)
    TITLE += (with DNSSEC, DHCPv6, Auth DNS, IPset, Nftset, Conntrack, NO_ID enabled by default)
    DEPENDS+=+PACKAGE_dnsmasq_full_dnssec:libnettle \
  	+PACKAGE_dnsmasq_full_ipset:kmod-ipt-ipset \
@@ -9,6 +9,14 @@
 +	+PACKAGE_dnsmasq_full_conntrack:libnetfilter-conntrack
    VARIANT:=full
    PROVIDES:=dnsmasq
+ endef
+ 
++define Package/dnsmasq-full/extra_provides
++    echo "libnftables.so.1";
++endef
++
+ define Package/dnsmasq/description
+   It is intended to provide coupled DNS and DHCP service to a LAN.
  endef
 
 --- a/dnsmasq/files/dnsmasq.init
