@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=dnsmasq
 PKG_UPSTREAM_VERSION:=2.89
 PKG_VERSION:=$(subst test,~~test,$(subst rc,~rc,$(PKG_UPSTREAM_VERSION)))
-PKG_RELEASE:=37
+PKG_RELEASE:=38
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_UPSTREAM_VERSION).tar.xz
 PKG_SOURCE_URL:=https://thekelleys.org.uk/dnsmasq/
@@ -70,10 +70,6 @@ $(call Package/dnsmasq/Default)
 	+PACKAGE_dnsmasq_full_conntrack:libnetfilter-conntrack
   VARIANT:=full
   PROVIDES:=dnsmasq
-endef
-
-define Package/dnsmasq-full/extra_provides
-    echo "libnftables.so.1";
 endef
 
 define Package/dnsmasq/description
