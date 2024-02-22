@@ -245,7 +245,7 @@ jobs:
         mv -f miniupnpd miniupnpd-iptables
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "oppackages" \
         utils/coremark utils/watchcat utils/dockerd utils/cgroupfs-mount net/uwsgi net/ddns-scripts net/smartdns net/curl \
-        net/ariang admin/netdata net/rp-pppoe net/tailscale
+        net/ariang admin/netdata net/rp-pppoe
         ) &
         (
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/openwrt" "openwrt" \
