@@ -30,8 +30,7 @@ document.head.append(E('style', {'type': 'text/css'},
 	min-width: 25em !important;
 }
 .log-entry-message-cell {
-	overflow-x: hidden !important;
-	text-overflow: ellipsis !important;
+	white-space: pre-wrap;
 	word-break: break-all !important;
 	word-wrap: break-word !important;
 }
