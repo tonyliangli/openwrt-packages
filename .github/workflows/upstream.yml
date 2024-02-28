@@ -248,7 +248,7 @@ jobs:
         mv -f miniupnpd miniupnpd-iptables
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "oppackages" \
         utils/coremark utils/watchcat utils/dockerd utils/cgroupfs-mount net/uwsgi net/ddns-scripts net/smartdns net/curl \
-        net/ariang admin/netdata net/rp-pppoe
+        net/ariang net/rp-pppoe
         ) &
         (
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/openwrt" "openwrt" \
@@ -271,7 +271,7 @@ jobs:
         libs/jpcre2 libs/wxbase libs/rapidjson libs/libcron libs/quickjspp libs/toml11 libs/libtorrent-rasterbar \
         libs/libdouble-conversion libs/qt6base libs/cxxopts libs/jpcre2 libs/alac sound/spotifyd \
         utils/qt6tools utils/cpulimit utils/filebrowser utils/cups utils/cups-bjnp utils/joker net/udp2raw net/msd_lite \
-        multimedia/you-get multimedia/lux multimedia/ykdl multimedia/gallery-dl devel/go-rice admin/gotop
+        multimedia/you-get multimedia/lux multimedia/ykdl multimedia/gallery-dl devel/go-rice admin/gotop admin/netdata
         ) &
         (
         git_sparse_clone develop "https://github.com/Ysurac/openmptcprouter-feeds" "openmptcp" luci-app-snmpd \
