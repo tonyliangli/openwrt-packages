@@ -42,6 +42,7 @@ index ed9770f070..1fea4ee29b 100644
 +	+v2ray-geosite \
 +	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Plugin:v2ray-plugin \
 +	+PACKAGE_$(PKG_NAME)_INCLUDE_Xray:xray-core \
++	+PACKAGE_$(PKG_NAME)_INCLUDE_Xray:unzip \
 +	+PACKAGE_$(PKG_NAME)_INCLUDE_Xray_Plugin:xray-plugin
  
  define Package/$(PKG_NAME)/config
@@ -102,7 +103,7 @@ index ed9770f070..1fea4ee29b 100644
  	default y
  
  config PACKAGE_$(PKG_NAME)_INCLUDE_tuic_client
-@@ -144,13 +156,11 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata
+@@ -144,14 +156,11 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata
  
  config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Plugin
  	bool "Include V2ray-Plugin (Shadowsocks Plugin)"
@@ -112,6 +113,7 @@ index ed9770f070..1fea4ee29b 100644
  config PACKAGE_$(PKG_NAME)_INCLUDE_Xray
  	bool "Include Xray"
 -	select PACKAGE_xray-core
+-	select PACKAGE_unzip
 -	default y if aarch64||arm||i386||x86_64
 +	default y
  
