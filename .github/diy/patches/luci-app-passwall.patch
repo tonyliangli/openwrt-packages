@@ -16,7 +16,7 @@ diff --git a/luci-app-passwall/Makefile b/luci-app-passwall/Makefile
 index ed9770f070..1fea4ee29b 100644
 --- a/luci-app-passwall/Makefile
 +++ b/luci-app-passwall/Makefile
-@@ -34,7 +34,28 @@ LUCI_TITLE:=LuCI support for PassWall
+@@ -34,7 +34,29 @@ LUCI_TITLE:=LuCI support for PassWall
  LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
  	+chinadns-ng +dns2socks +dns2tcp +dnsmasq-full +ip-full \
  	+libuci-lua +lua +luci-compat +luci-lib-jsonc \
