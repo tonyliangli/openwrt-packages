@@ -2,7 +2,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wireless-regdb
 PKG_VERSION:=2024.01.23
-PKG_RELEASE:=10
+PKG_RELEASE:=11
+PKG_LICENSE:=ISC
+PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@KERNEL/software/network/wireless-regdb/
