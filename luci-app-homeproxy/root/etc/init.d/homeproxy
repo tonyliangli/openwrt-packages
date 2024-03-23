@@ -94,7 +94,7 @@ start_service() {
 			fi
 			;;
 		"proxy_mainland_china")
-			sed -r -e "s/full://g" -e "/:/d" -e "s/(.*)/server=\/\1\/127.0.0.1#$dns_port/g" \
+			sed -r -e "s/(.*)/server=\/\1\/127.0.0.1#$dns_port/g" \
 				"$HP_DIR/resources/china_list.txt" > "$DNSMASQ_DIR/china_list.conf"
 			;;
 		"custom"|"global")
@@ -139,6 +139,7 @@ start_service() {
 			config_get tun_mark "infra" "tun_mark" "102"
 
 			ip tuntap add mode tun user root name "$tun_name"
+			sleep 1s
 			ip link set "$tun_name" up
 
 			ip route replace default dev "$tun_name" table "$table_mark"
@@ -192,11 +193,13 @@ start_service() {
 			procd_append_param command --trust-dns "127.0.0.1#$dns_port"
 			procd_append_param command --ipset-name4 "inet@fw4@homeproxy_mainland_addr_v4"
 			procd_append_param command --ipset-name6 "inet@fw4@homeproxy_mainland_addr_v6"
+			procd_append_param command --chnlist-file "$HP_DIR/resources/china_list.txt"
 			procd_append_param command --gfwlist-file "$HP_DIR/resources/gfw_list.txt"
 			[ "$ipv6_support" -eq "1" ] || procd_append_param command --no-ipv6=tC
 
 			if [ -x "/sbin/ujail" ]; then
 				procd_add_jail "chinadns-ng" log
+				procd_add_jail_mount "$HP_DIR/resources/china_list.txt"
 				procd_add_jail_mount "$HP_DIR/resources/gfw_list.txt"
 				procd_set_param capabilities "/etc/capabilities/homeproxy.json"
 				procd_set_param no_new_privs 1
@@ -258,6 +261,11 @@ start_service() {
 	procd_set_param respawn
 	procd_close_instance
 
+	# Prepare ruleset directory for custom routing mode
+	if [ "$routing_mode" = "custom" ]; then
+		[ -d "$HP_DIR/ruleset" ] || mkdir -p "$HP_DIR/ruleset"
+	fi
+
 	# Update permissions for ujail
 	if [ "$outbound_node" != "nil" ]; then
 		echo > "$RUN_DIR/sing-box-c.log"
@@ -299,9 +307,6 @@ stop_service() {
 	ip -6 route del local ::/0 dev lo table "$table_mark" 2>"/dev/null"
 
 	# TUN
-	ip link set "$tun_name" down 2>"/dev/null"
-	ip tuntap del mode tun name "$tun_name" 2>"/dev/null"
-
 	ip route del default dev "$tun_name" table "$table_mark" 2>"/dev/null"
 	ip rule del fwmark "$tun_mark" table "$table_mark" 2>"/dev/null"
 
@@ -340,6 +345,17 @@ stop_service() {
 		"$RUN_DIR/sing-box-s.json" "$RUN_DIR/sing-box-s.log"
 
 	log "Service stopped."
+}
+
+service_stopped() {
+	# Load config
+	config_load "$CONF"
+	local tun_name
+	config_get tun_name "infra" "tun_name" "singtun0"
+
+	# TUN
+	ip link set "$tun_name" down 2>"/dev/null"
+	ip tuntap del mode tun name "$tun_name" 2>"/dev/null"
 }
 
 reload_service() {
