@@ -20,4 +20,3 @@
 | arm_cortex-a9_vfpv3-d16    | [📥](https://dl.openwrt.ai/latest/packages/arm_cortex-a9_vfpv3-d16/kiddin9/) |  Linksys WRT1900ACS等 |  src/gz openwrt_kiddin9 https://dl.openwrt.ai/latest/packages/arm_cortex-a9_vfpv3-d16/kiddin9 |   日更 |
 | arm_cortex-a5_vfpv4    | [📥](https://dl.openwrt.ai/latest/packages/arm_cortex-a5_vfpv4/kiddin9/) |  玩客云等 |  src/gz openwrt_kiddin9 https://dl.openwrt.ai/latest/packages/arm_cortex-a5_vfpv4/kiddin9 |   日更 |
 | arm_cortex-a15_neon-vfpv4/kiddin9    | [📥](https://dl.openwrt.ai/latest/packages/arm_cortex-a15_neon-vfpv4/kiddin9/) |  NETGEAR R7800等 |  src/gz openwrt_kiddin9 https://dl.openwrt.ai/latest/packages/arm_cortex-a15_neon-vfpv4/kiddin9 |   日更 |
-| arm_xscale    | [📥](https://dl.openwrt.ai/latest/packages/arm_xscale/kiddin9/) |  Linksys EA4500等 |  src/gz openwrt_kiddin9 https://dl.openwrt.ai/latest/packages/arm_xscale/kiddin9 |   日更 |
