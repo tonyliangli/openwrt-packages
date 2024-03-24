@@ -232,7 +232,6 @@ jobs:
         git_clone https://github.com/JiaY-shi/fancontrol fanc && mvdir fanc
         ) &
         (
-        svn export https://github.com/Ysurac/openmptcprouter-feeds/trunk/luci-app-iperf
         svn export https://github.com/QiuSimons/OpenWrt-Add/trunk/luci-app-irqbalance
         #svn export https://github.com/xiaoxifu64/immortalwrt/trunk/package/rooter/ext-rooter-basic
         svn export https://github.com/openwrt/luci/branches/openwrt-22.03/applications/luci-app-wireguard
@@ -274,7 +273,7 @@ jobs:
         ) &
         (
         git_sparse_clone develop "https://github.com/Ysurac/openmptcprouter-feeds" "openmptcp" luci-app-snmpd \
-        luci-app-packet-capture luci-app-mail msmtp
+        luci-app-packet-capture luci-app-mail msmtp luci-app-iperf atinout
         git_sparse_clone master "https://github.com/xiaoqingfengATGH/feeds-xiaoqingfeng" "xiaoqingfeng" homeredirect luci-app-homeredirect
         git_sparse_clone master "https://github.com/immortalwrt/immortalwrt" "immortal" \
         package/kernel/r8168 package/kernel/r8125 package/kernel/rtl8188eu package/kernel/rtl8192eu package/kernel/rtl8812au-ac package/kernel/rtl8189es package/emortal/autocore package/emortal/automount \
