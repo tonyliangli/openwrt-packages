@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=speedtestpp
-PKG_RELEASE:=1
+PKG_RELEASE:=
 PKG_VERSION:=1.14
 
 PKG_SOURCE_PROTO:=git
