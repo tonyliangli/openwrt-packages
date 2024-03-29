@@ -247,5 +247,4 @@ uci commit base_config
 modprobe xt_FULLCONENAT || {
 uci -q set firewall.@defaults[0].fullcone='0'
 uci commit firewall
-fi
 }
