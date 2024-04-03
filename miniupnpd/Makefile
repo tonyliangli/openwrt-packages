@@ -7,13 +7,12 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=miniupnpd-iptables
-PKG_VERSION:=3022-08-31
-PKG_RELEASE:=16
+PKG_NAME:=miniupnpd
+PKG_VERSION:=2.0.20170421
+PKG_RELEASE:=29
 
-PKG_SOURCE_URL:=http://miniupnp.free.fr/files
-PKG_SOURCE:=miniupnpd-2.0.20180503.tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/miniupnpd-2.0.20180503
+PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_HASH:=skip
 
 PKG_MAINTAINER:=Markus Stenberg <fingon@iki.fi>
@@ -21,29 +20,27 @@ PKG_LICENSE:=BSD-3-Clause
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/$(PKG_NAME)
+define Package/miniupnpd
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+iptables +libip4tc +libuuid
-  PROVIDES:=miniupnpd
   TITLE:=Lightweight UPnP IGD, NAT-PMP & PCP daemon
   SUBMENU:=Firewall
   URL:=http://miniupnp.free.fr/
-  VARIANT:=iptables
 endef
 
-define Package/$(PKG_NAME)/config
+define Package/miniupnpd/config
 config MINIUPNPD_IGDv2
 	bool
 	default n
 	prompt "Enable IGDv2"
 endef
 
-define Package/$(PKG_NAME)/conffiles
+define Package/miniupnpd/conffiles
 /etc/config/upnpd
 endef
 
-define Package/$(PKG_NAME)/postinst
+define Package/miniupnpd/postinst
 #!/bin/sh
 
 if [ -z "$$IPKG_INSTROOT" ]; then
@@ -70,7 +67,7 @@ MAKE_FLAGS += \
 	miniupnpd
 
 
-define Package/$(PKG_NAME)/install
+define Package/miniupnpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/init.d $(1)/etc/config $(1)/etc/uci-defaults $(1)/etc/hotplug.d/iface $(1)/usr/share/miniupnpd
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/sbin/miniupnpd
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
@@ -80,4 +77,4 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DATA) ./files/firewall.include $(1)/usr/share/miniupnpd/firewall.include
 endef
 
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,miniupnpd))
