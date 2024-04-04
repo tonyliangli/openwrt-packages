@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=daed
-PKG_RELEASE:=49
+PKG_RELEASE:=50
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/daeuniverse/daed.git
@@ -78,7 +78,7 @@ endef
 
 WEB_FILE:=$(PKG_NAME)-web-$(PKG_VERSION).zip
 define Download/daed-web
-	URL:=@IMMORTALWRT
+	URL:=https://mirror2.immortalwrt.org/sources
 	FILE:=$(WEB_FILE)
 	HASH:=skip
 endef
