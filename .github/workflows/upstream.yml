@@ -94,7 +94,6 @@ jobs:
         git_clone https://github.com/kiddin9/openwrt-bypass && mvdir openwrt-bypass
         git_clone https://github.com/kiddin9/luci-app-dnsfilter
         git_clone https://github.com/kiddin9/aria2
-        git_clone https://github.com/kiddin9/luci-app-baidupcs-web
         git_clone https://github.com/kiddin9/luci-theme-edge
         git_clone https://github.com/kiddin9/autoshare && mvdir autoshare
         git_clone https://github.com/kiddin9/luci-app-xlnetacc
@@ -240,7 +239,7 @@ jobs:
         ) &
         (
         git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" net/miniupnpd net/mwan3 multimedia/UnblockNeteaseMusic-Go \
-        multimedia/UnblockNeteaseMusic net/amule net/softethervpn5 net/antileech net/baidupcs-web multimedia/gmediarender net/go-aliyundrive-webdav \
+        multimedia/UnblockNeteaseMusic net/amule net/softethervpn5 net/antileech multimedia/gmediarender net/go-aliyundrive-webdav \
         net/qBittorrent-static net/phtunnel net/frp \
         net/uugamebooster net/verysync net/vlmcsd net/dnsforwarder net/tcpping net/netatalk net/pgyvpn lang/golang
         mv -f miniupnpd miniupnpd-iptables
