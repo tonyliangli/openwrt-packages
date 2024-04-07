@@ -1,5 +1,5 @@
---- a/miniupnpd/minissdp.c
-+++ b/miniupnpd/minissdp.c
+--- a/minissdp.c
++++ b/minissdp.c
 @@ -1021,7 +1021,7 @@ ProcessSSDPData(int s, const char *bufr, int n,
  	}
  	if(lan_addr == NULL)
