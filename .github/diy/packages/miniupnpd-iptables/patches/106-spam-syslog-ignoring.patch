@@ -6,8 +6,8 @@
  	{
 -		syslog(LOG_WARNING, "SSDP packet sender %s (if_index=%d) not from a LAN, ignoring",
 -		       sender_str, source_if);
-+		#syslog(LOG_WARNING, "SSDP packet sender %s (if_index=%d) not from a LAN, ignoring",
-+		#       sender_str, source_if);
++		/* syslog(LOG_WARNING, "SSDP packet sender %s (if_index=%d) not from a LAN, ignoring",
++		       sender_str, source_if); /*
  		return;
  	}
 
