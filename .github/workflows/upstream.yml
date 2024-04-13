@@ -239,7 +239,7 @@ jobs:
         ) &
         (
         git_sparse_clone master "https://github.com/coolsnowwolf/packages" "leanpkg" multimedia/UnblockNeteaseMusic-Go \
-        multimedia/UnblockNeteaseMusic net/amule net/softethervpn5 net/antileech multimedia/gmediarender net/go-aliyundrive-webdav \
+        multimedia/UnblockNeteaseMusic net/amule net/softethervpn5 net/antileech net/snort3 multimedia/gmediarender net/go-aliyundrive-webdav \
         net/qBittorrent-static net/phtunnel \
         net/uugamebooster net/verysync net/vlmcsd net/dnsforwarder net/tcpping net/netatalk net/pgyvpn lang/golang
         git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "oppackages" \
