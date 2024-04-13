@@ -229,6 +229,7 @@ jobs:
         git_clone https://github.com/sirpdboy/luci-app-chatgpt-web
         git_clone https://github.com/sirpdboy/luci-app-eqosplus && rm -rf luci-app-eqosplus/po/zh_Hans
         git_clone https://github.com/JiaY-shi/fancontrol fanc && mvdir fanc
+        git_clone https://github.com/Siriling/5G-Modem-Support Modem && mvdir Modem
         ) &
         (
         svn export https://github.com/QiuSimons/OpenWrt-Add/trunk/luci-app-irqbalance
