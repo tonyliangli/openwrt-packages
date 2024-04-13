@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=snort3
 PKG_VERSION:=3.1.84.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/snort3/snort3/archive/refs/tags/
@@ -25,7 +25,12 @@ define Package/snort3
   SUBMENU:=Firewall
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libstdcpp +libdaq3 +libdnet +libopenssl +libpcap +libpcre +libpthread +libuuid +zlib +libhwloc +libtirpc +luajit +libatomic
+  DEPENDS:= \
+	    +(TARGET_x86||TARGET_x86_64):hyperscan-runtime \
+	    +(TARGET_x86||TARGET_x86_64):gperftools-runtime \
+	    +libstdcpp +libdaq3 +libdnet +libopenssl +libpcap +libpcre +libpthread \
+	    +libuuid +zlib +libhwloc +libtirpc @HAS_LUAJIT_ARCH +luajit +libatomic \
+	    +kmod-nft-queue +liblzma +ucode +ucode-mod-fs +ucode-mod-uci
   TITLE:=Lightweight Network Intrusion Detection System
   URL:=http://www.snort.org/
   MENU:=1
@@ -38,6 +43,18 @@ define Package/snort3/description
   analysis and pattern matching in order to detect anomalies, misuse and
   attacks.
 endef
+
+# Hyperscan and gperftools only builds for x86
+ifdef CONFIG_TARGET_x86_64
+	CMAKE_OPTIONS += -DHS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/hs
+endif
+
+# Hyperscan and gperftools only builds for x86
+ifdef CONFIG_TARGET_x86_64
+	CMAKE_OPTIONS += -DHS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/hs \
+			 -DENABLE_TCMALLOC=ON \
+			 -DTCMALLOC_LIBRARIES=$(STAGING_DIR)/usr/lib/libtcmalloc.so
+endif
 
 CMAKE_OPTIONS += \
 	-DUSE_TIRPC:BOOL=YES \
@@ -90,7 +107,8 @@ define Package/snort3/install
 		$(PKG_INSTALL_DIR)/usr/include/snort/lua/snort_plugin.lua \
 		$(1)/usr/share/lua/
 
-	$(INSTALL_DIR) $(1)/etc/snort
+	$(INSTALL_DIR) $(1)/etc/snort/{rules,lists,builtin_rules,so_rules}
+
 	$(INSTALL_CONF) \
 		$(PKG_INSTALL_DIR)/usr/etc/snort/*.lua \
 		$(1)/etc/snort
@@ -107,6 +125,25 @@ define Package/snort3/install
 	$(INSTALL_CONF) \
 		./files/snort.config \
 		$(1)/etc/config/snort
+	$(INSTALL_CONF) \
+		./files/local.lua \
+		$(1)/etc/snort
+	$(INSTALL_CONF) \
+		./files/homenet.lua \
+		$(1)/etc/snort
+	sed \
+		-i -e "/^EXTERNAL_NET\\s\\+=/ a include 'homenet.lua'" \
+		-e "/^HOME_NET\\s\\+=/ i -- we set HOME_NET and EXTERNAL_NET here or via an included file" \
+		-e 's/^\(HOME_NET\s\+=\)/--\1/g' \
+		-e 's/^\(EXTERNAL_NET\s\+=\)/--\1/g' \
+		$(1)/etc/snort/snort.lua
+	sed \
+		-i -e "s/^\\(RULE_PATH\\s\\+=\\).*/\\1 'rules'/g" \
+		-e "s/^\\(BUILTIN_RULE_PATH\\s\\+=\\).*/\\1 'builtin_rules'/g" \
+		-e "s/^\\(PLUGIN_RULE_PATH\\s\\+=\\).*/\\1 'so_rules'/g" \
+		-e "s/^\\(WHITE_LIST_PATH\\s\\+=\\).*/\\1 'lists'/g" \
+		-e "s/^\\(BLACK_LIST_PATH\\s\\+=\\).*/\\1 'lists'/g" \
+		$(1)/etc/snort/snort_defaults.lua
 endef
 
 $(eval $(call BuildPackage,snort3))
