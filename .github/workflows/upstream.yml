@@ -228,7 +228,7 @@ jobs:
         git_clone https://github.com/sirpdboy/luci-app-chatgpt-web
         git_clone https://github.com/sirpdboy/luci-app-eqosplus && rm -rf luci-app-eqosplus/po/zh_Hans
         git_clone https://github.com/JiaY-shi/fancontrol fanc && mvdir fanc
-        git_clone https://github.com/Siriling/5G-Modem-Support Modem && mvdir Modem
+        git_clone https://github.com/Siriling/5G-Modem-Support Modem && mvdir Modem;rm -rf rooter
         ) &
         (
         svn export https://github.com/QiuSimons/OpenWrt-Add/trunk/luci-app-irqbalance
@@ -301,7 +301,6 @@ jobs:
         mv -n luciapp/!(luci-app-noddos|luci-app-cshark|luci-app-dnscrypt-proxy|luci-app-https-dns-proxy|luci-app-ssr-mudb-server|luci-app-ledtrig-*) ./ ; rm -Rf luciapp
         mv -n lean/* ./ ; rm -Rf lean
         mv -n liep/* ./ ; rm -Rf liep
-        mv -n wwan/*/* ./; rm -rf wwan
         mv -n openwrt-app-actions/applications/* ./;rm -rf openwrt-app-actions
         rm -Rf */.git
         for pkg in $(ls -d .github/diy/packages/*); do
