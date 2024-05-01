@@ -11,7 +11,7 @@
  	return (addr[0] != 0xff) && (0x01 & addr[0]);
 --- a/os_dep/linux/ioctl_cfg80211.c
 +++ b/os_dep/linux/ioctl_cfg80211.c
-@@ -417,9 +417,9 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset, u8
+@@ -417,7 +417,7 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset, u8
  	if (ret != _SUCCESS)
  		goto exit;
  
