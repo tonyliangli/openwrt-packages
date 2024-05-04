@@ -997,10 +997,6 @@ function handleOpkg(ev)
 
 		var argv = [ cmd, '--force-removal-of-dependent-packages' ];
 
-		argv.push('--force-checksum');
-		
-		argv.push('--force-depends');
-
 		if (rem && rem.checked)
 			argv.push('--autoremove');
 
