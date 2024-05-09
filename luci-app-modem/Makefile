@@ -9,18 +9,10 @@ LUCI_PKGARCH:=all
 PKG_LICENSE:=GPLv3
 PKG_LINCESE_FILES:=LICENSE
 PKF_MAINTAINER:=Siriling <siriling@qq.com>
-LUCI_DEPENDS:=+luci-compat +kmod-usb-net +kmod-usb-net-cdc-ether +kmod-usb-acm \
-		+kmod-usb-net-qmi-wwan +kmod-usb-net-rndis +kmod-usb-serial-qualcomm \
-		+kmod-usb-net-sierrawireless +kmod-usb-ohci +kmod-usb-serial \
-		+kmod-usb-serial-option +kmod-usb-wdm \
-		+kmod-usb2 +kmod-usb3 \
-		+kmod-usb-net-cdc-mbim \
+LUCI_DEPENDS:=+luci-compat \
 		+usbutils \
-		+kmod-pcie_mhi \
 		+pciutils \
 		+quectel-CM-5G \
-		+modemmanager \
-		+luci-proto-modemmanager \
 		+sms-tool \
 		+jq \
 
