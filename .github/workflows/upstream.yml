@@ -104,6 +104,7 @@ jobs:
         (
         git_clone https://github.com/xiaorouji/openwrt-passwall && mvdir openwrt-passwall
         git clone https://github.com/fw876/helloworld && rm -rf helloworld/{v2raya,naiveproxy} && mvdir helloworld
+        git_clone https://github.com/xiaorouji/openwrt-passwall-packages && rm -rf openwrt-passwall-packages/chinadns-ng && mvdir openwrt-passwall-packages
         git_clone https://github.com/Lienol/openwrt-package liep
         git clone https://github.com/AutoCONFIG/minieap-openwrt -b default
         git_clone https://github.com/rufengsuixing/luci-app-autoipsetadder
@@ -176,6 +177,7 @@ jobs:
         git_clone https://github.com/ZeaKyX/speedtest-web
         git_clone https://github.com/ZeaKyX/luci-app-speedtest-web
         git_clone https://github.com/jhonathanc/ps3netsrv-openwrt && mv -n ps3netsrv-openwrt/* ./;rm -rf ps3netsrv-openwrt
+        git_clone https://github.com/linkease/openwrt-app-actions
         ) &
         (
         git_clone https://github.com/honwen/luci-app-aliddns
@@ -196,10 +198,6 @@ jobs:
         git_clone https://github.com/shanglanxin/luci-app-homebridge
         git_clone https://github.com/ykxVK8yL5L/luci-app-synology synology && mv -n synology/luci-app-synology ./ && rm -rf synology
         git_clone https://github.com/htynkn/openwrt-switch-lan-play && mv -n openwrt-switch-lan-play/package/* ./ && rm -rf openwrt-switch-lan-play
-        ) &
-        (
-        git_clone https://github.com/linkease/openwrt-app-actions
-        git_clone https://github.com/xiaorouji/openwrt-passwall-packages && rm -rf openwrt-passwall-packages/chinadns-ng && mvdir openwrt-passwall-packages
         ) &
         (
         git_clone https://github.com/honwen/luci-app-shadowsocks-rust
