@@ -219,6 +219,11 @@ stop_service() {
 	fi
 }
 
+reload_service() {
+	stop
+	start
+}
+
 start_service() {
 	config_load "upnpd"
 	config_foreach upnpd "upnpd"
