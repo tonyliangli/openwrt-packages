@@ -149,6 +149,18 @@
  
  include $(INCLUDE_DIR)/package.mk
 
+--- a/miniupnpd/files/miniupnpd.init
++++ b/miniupnpd/files/miniupnpd.init
+@@ -220,3 +220,8 @@
+ }
+ 
++reload_service() {
++	stop
++	start
++}
++
+ start_service() {
+
 --- a/wifidog-wiwiz/Makefile
 +++ b/wifidog-wiwiz/Makefile
 @@ -21,7 +21,7 @@ define Package/wifidog-wiwiz
