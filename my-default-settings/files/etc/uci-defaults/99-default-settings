@@ -222,3 +222,4 @@ uci -q set firewall.@defaults[0].fullcone='0'
 uci commit firewall
 }
 }
+
