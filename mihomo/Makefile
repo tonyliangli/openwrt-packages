@@ -1,11 +1,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mihomo
-PKG_RELEASE:=44
+PKG_RELEASE:=45
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/MetaCubeX/mihomo.git
-PKG_SOURCE_DATE:=2024-08-30
+PKG_SOURCE_DATE:=2024-09-01
 PKG_SOURCE_VERSION:=ede980f7d523eaca464fbc589b65f77cf4099f1b
 PKG_MIRROR_HASH:=skip
 
@@ -80,6 +80,9 @@ define Package/mihomo/install
 
 	$(INSTALL_DIR) $(1)/etc/capabilities
 	$(INSTALL_DATA) $(CURDIR)/files/capabilities.json $(1)/etc/capabilities/mihomo.json
+
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) $(CURDIR)/files/mihomo.upgrade $(1)/lib/upgrade/keep.d/mihomo
 endef
 
 define Build/Prepare
